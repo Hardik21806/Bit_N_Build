@@ -19,6 +19,15 @@ export function useIncident(id) {
   });
 }
 
+export function useAllIncidents() {
+  return useQuery({
+    queryKey: ['incidents', 'all'],
+    queryFn: () => incidentApi.list({ limit: 200 }),
+    select: (response) => response.data,
+    refetchInterval: 30000,
+  });
+}
+
 export function useIncidentSummary(id) {
   return useQuery({
     queryKey: ['incident', id, 'summary'],
