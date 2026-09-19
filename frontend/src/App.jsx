@@ -6,18 +6,6 @@ import { Layout } from './components/layout';
 import { useDashboardWebSocket } from './hooks';
 import { DashboardPage, IncidentsPage, ResourcesPage, ReportIncidentPage, IncidentDetailPage, AssignmentsPage, AlertsPage} from './pages';
 
-// function ReportIncidentPage() {
-//   return <div className="p-4">Report Incident Page - Coming Soon</div>;
-// }
-
-// function ResourcesPage() {
-//   return <div className="p-4">Resources Page - Coming Soon</div>;
-// }
-
-function AssignmentsPage() {
-  return <div className="p-4">Assignments Page - Coming Soon</div>;
-}
-
 function MapPage() {
   return <div className="p-4">Map Page - Coming Soon</div>;
 }
