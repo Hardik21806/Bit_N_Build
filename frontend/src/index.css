@@ -1,1 +1,126 @@
 @import "tailwindcss";
+
+@theme {
+  --color-neutral-50: #fafafa;
+  --color-neutral-100: #f5f5f5;
+  --color-neutral-200: #e5e5e5;
+  --color-neutral-300: #d4d4d4;
+  --color-neutral-400: #a3a3a3;
+  --color-neutral-500: #737373;
+  --color-neutral-600: #525252;
+  --color-neutral-700: #404040;
+  --color-neutral-800: #262626;
+  --color-neutral-900: #171717;
+  --color-neutral-950: #0a0a0a;
+
+  --color-severity-critical: #b91c1c;
+  --color-severity-critical-light: #fef2f2;
+  --color-severity-critical-dark: #7f1d1d;
+  --color-severity-critical-text: #991b1b;
+  
+  --color-severity-high: #c2410c;
+  --color-severity-high-light: #fff7ed;
+  --color-severity-high-dark: #7c2d12;
+  --color-severity-high-text: #9a3412;
+  
+  --color-severity-medium: #b45309;
+  --color-severity-medium-light: #fefce8;
+  --color-severity-medium-dark: #713f12;
+  --color-severity-medium-text: #854d0e;
+  
+  --color-severity-low: #166534;
+  --color-severity-low-light: #f0fdf4;
+  --color-severity-low-dark: #14532d;
+  --color-severity-low-text: #15803d;
+
+  --color-primary: #1e40af;
+  --color-primary-hover: #1e3a8a;
+  --color-primary-light: #eff6ff;
+  --color-primary-text: #1e40af;
+
+  --color-background: #ffffff;
+  --color-background-secondary: #fafafa;
+  --color-background-tertiary: #f5f5f5;
+  --color-background-elevated: #ffffff;
+
+  --color-border: #e5e5e5;
+  --color-border-strong: #d4d4d4;
+  --color-border-focus: #1e40af;
+
+  --color-text-primary: #171717;
+  --color-text-secondary: #525252;
+  --color-text-muted: #737373;
+  --color-text-inverse: #ffffff;
+
+  --font-family-sans: Inter, system-ui, -apple-system, sans-serif;
+  --font-family-mono: "JetBrains Mono", "Fira Code", monospace;
+
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 25px 50px -12px rgb(0 0 0 / 0.15);
+  --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+  --radius-sm: 0.25rem;
+  --radius: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  
+  body {
+    font-family: var(--font-family-sans);
+    background-color: var(--color-background-secondary);
+    color: var(--color-text-primary);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  :focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 2px;
+  }
+  
+  ::selection {
+    background-color: var(--color-primary-light);
+    color: var(--color-primary);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 200ms ease-out;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 200ms ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
