@@ -21,13 +21,8 @@ function MapPage() {
   return <div className="p-4">Map Page - Coming Soon</div>;
 }
 
-<<<<<<< HEAD
 function AlertsPage() {
   return <div className="p-4">Alerts Page - Coming Soon</div>;
-=======
-function AnalyticsPage() {
-  return <div className="p-4">Analytics Page - Coming Soon</div>;
->>>>>>> 97b2f88835bb986413e5518ea09721e936ef065c
 }
 
 function SettingsPage() {
