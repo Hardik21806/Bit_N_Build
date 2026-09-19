@@ -184,6 +184,15 @@ export function useDashboardAlerts(status = 'active') {
   });
 }
 
+export function useAllDashboardAlerts() {
+  return useQuery({
+    queryKey: ['dashboard', 'alerts', 'all'],
+    queryFn: () => dashboardApi.getAlerts('all'),
+    select: (response) => response.data,
+    refetchInterval: 30000,
+  });
+}
+
 export function useAcknowledgeAlert() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -193,6 +202,19 @@ export function useAcknowledgeAlert() {
     },
     onError: (error) => {
       console.error('Failed to acknowledge alert:', parseApiError(error));
+    },
+  });
+}
+
+export function useResolveAlert() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id) => dashboardApi.resolveAlert(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['dashboard', 'alerts'] });
+    },
+    onError: (error) => {
+      console.error('Failed to resolve alert:', parseApiError(error));
     },
   });
 }

@@ -49,6 +49,7 @@ export const dashboardApi = {
   getOverview: () => api.get(API_ENDPOINTS.DASHBOARD_OVERVIEW),
   getAlerts: (status = 'active') => api.get(API_ENDPOINTS.DASHBOARD_ALERTS, { params: { status } }),
   acknowledgeAlert: (id) => api.patch(API_ENDPOINTS.ALERT_ACKNOWLEDGE(id)),
+  resolveAlert: (id) => api.patch(`/dashboard/alerts/${id}/resolve`),
 };
 
 export const analyticsApi = {

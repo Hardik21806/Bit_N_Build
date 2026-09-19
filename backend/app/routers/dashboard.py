@@ -51,11 +51,16 @@ def dashboard_overview():
 
 @router.get("/dashboard/alerts")
 def dashboard_alerts(status: str = "active"):
+    filters = {}
+    if status and status != "all":
+        filters["status"] = status
     try:
-        return db.select("alerts", filters={"status": status}, limit=200, order_by="created_at")
+        return db.select("alerts", filters=filters, limit=200, order_by="created_at")
     except db.DBError as exc:
         raise HTTPException(status_code=500, detail=str(exc)) from exc
 
+
+from datetime import datetime, timezone
 
 @router.patch("/dashboard/alerts/{alert_id}/acknowledge")
 def acknowledge_alert(alert_id: str):
@@ -64,6 +69,21 @@ def acknowledge_alert(alert_id: str):
         raise HTTPException(status_code=404, detail="Alert not found")
     try:
         result = db.update("alerts", {"id": alert_id}, {"status": "acknowledged"})
+        return result[0]
+    except db.DBError as exc:
+        raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+
+@router.patch("/dashboard/alerts/{alert_id}/resolve")
+def resolve_alert(alert_id: str):
+    alert = db.select_one("alerts", {"id": alert_id})
+    if not alert:
+        raise HTTPException(status_code=404, detail="Alert not found")
+    try:
+        result = db.update("alerts", {"id": alert_id}, {
+            "status": "resolved",
+            "resolved_at": datetime.now(timezone.utc).isoformat()
+        })
         return result[0]
     except db.DBError as exc:
         raise HTTPException(status_code=500, detail=str(exc)) from exc
