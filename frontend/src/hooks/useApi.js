@@ -166,6 +166,41 @@ export function useAssignmentsForIncidents(incidentIds) {
   });
 }
 
+export function useAllAssignments() {
+  return useQuery({
+    queryKey: ['assignments', 'all'],
+    queryFn: async () => {
+      const incidentsResponse = await incidentApi.list({ limit: 200 });
+      const incidents = incidentsResponse.data;
+      const incidentIds = incidents.map(i => i.id);
+      if (!incidentIds.length) return [];
+      const results = await Promise.all(
+        incidentIds.map(id => resourceApi.getAssignments(id).then(r => r.data).catch(() => []))
+      );
+      return results.flat().map((assignment, idx) => ({
+        ...assignment,
+        incident: incidents.find(i => i.id === assignment.incident_id)
+      }));
+    },
+    refetchInterval: 30000,
+  });
+}
+
+export function useUpdateAssignmentStatus() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, status }) => resourceApi.updateAssignmentStatus(id, status),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['assignments'] });
+      queryClient.invalidateQueries({ queryKey: ['incidents'] });
+      queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+    },
+    onError: (error) => {
+      console.error('Failed to update assignment status:', parseApiError(error));
+    },
+  });
+}
+
 export function useDashboardOverview() {
   return useQuery({
     queryKey: ['dashboard', 'overview'],

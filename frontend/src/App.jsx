@@ -4,19 +4,7 @@ import { QueryProvider } from './lib/queryClient';
 import { TooltipProvider } from './components/ui';
 import { Layout } from './components/layout';
 import { useDashboardWebSocket } from './hooks';
-import { DashboardPage, IncidentsPage, ResourcesPage, ReportIncidentPage, IncidentDetailPage} from './pages';
-
-// function ReportIncidentPage() {
-//   return <div className="p-4">Report Incident Page - Coming Soon</div>;
-// }
-
-// function ResourcesPage() {
-//   return <div className="p-4">Resources Page - Coming Soon</div>;
-// }
-
-function AssignmentsPage() {
-  return <div className="p-4">Assignments Page - Coming Soon</div>;
-}
+import { DashboardPage, IncidentsPage, ResourcesPage, ReportIncidentPage, IncidentDetailPage, AssignmentsPage } from './pages';
 
 function MapPage() {
   return <div className="p-4">Map Page - Coming Soon</div>;
