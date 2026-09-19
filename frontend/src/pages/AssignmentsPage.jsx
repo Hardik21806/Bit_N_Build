@@ -181,7 +181,10 @@ export function AssignmentsPage() {
                       .filter(a => a.incident?.id && !seen.has(a.incident.id) && seen.add(a.incident.id))
                       .map(inc => (
                         <SelectItem key={inc.incident.id} value={inc.incident.id}>
-                          {inc.incident.id.slice(0, 12)}... - {inc.incident.incident_type?.replace('_', ' ')}
+                          <div className="flex flex-col">
+                            <span className="font-medium capitalize">{inc.incident.incident_type?.replace('_', ' ')}</span>
+                            <span className="text-xs text-text-muted font-mono">{inc.incident.id.slice(0, 12)}...</span>
+                          </div>
                         </SelectItem>
                       ));
                   })()}
@@ -190,40 +193,40 @@ export function AssignmentsPage() {
           </div>
 
           <ScrollArea className="max-h-[600px]">
-            <Table>
+<Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="cursor-pointer" onClick={() => handleSort('id')}>
+                  <TableHead className="cursor-pointer w-32" onClick={() => handleSort('id')}>
                     <div className="flex items-center gap-1">
                       Assignment ID
                       {sortConfig.key === 'id' && (sortConfig.direction === 'asc' ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />)}
                     </div>
                   </TableHead>
-                  <TableHead className="hidden md:table-cell">Resource</TableHead>
-                  <TableHead className="hidden md:table-cell">Type</TableHead>
-                  <TableHead className="cursor-pointer" onClick={() => handleSort('status')}>
+                  <TableHead className="w-60">Resource</TableHead>
+                  <TableHead className="hidden sm:table-cell w-28">Type</TableHead>
+                  <TableHead className="cursor-pointer w-28" onClick={() => handleSort('status')}>
                     <div className="flex items-center gap-1">
                       Status
                       {sortConfig.key === 'status' && (sortConfig.direction === 'asc' ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />)}
                     </div>
                   </TableHead>
-                  <TableHead className="hidden lg:table-cell">Incident</TableHead>
-                  <TableHead className="hidden lg:table-cell">Incident Type</TableHead>
-                  <TableHead className="hidden lg:table-cell">Incident Severity</TableHead>
-                  <TableHead className="w-40">ETA</TableHead>
-                  <TableHead className="cursor-pointer hidden lg:table-cell" onClick={() => handleSort('assigned_at')}>
+                  <TableHead className="hidden lg:table-cell w-40">Incident</TableHead>
+                  <TableHead className="hidden lg:table-cell w-32">Incident Type</TableHead>
+                  <TableHead className="hidden lg:table-cell w-24">Severity</TableHead>
+                  <TableHead className="w-28">ETA</TableHead>
+                  <TableHead className="cursor-pointer hidden lg:table-cell w-32" onClick={() => handleSort('assigned_at')}>
                     <div className="flex items-center gap-1">
                       Assigned
                       {sortConfig.key === 'assigned_at' && (sortConfig.direction === 'asc' ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />)}
                     </div>
                   </TableHead>
-                  <TableHead className="w-48">Actions</TableHead>
+                  <TableHead className="w-28">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredAssignments.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={10} className="py-12 text-center">
+                    <TableCell colSpan={9} className="py-12 text-center">
                       <EmptyState
                         icon={Truck}
                         title="No assignments found"
@@ -237,16 +240,24 @@ export function AssignmentsPage() {
                       <TableCell className="p-3">
                         <span className="font-mono text-sm text-text-primary">{assignment.id.slice(0, 12)}...</span>
                       </TableCell>
-                      <TableCell className="hidden md:table-cell p-3">
-                        <div className="flex items-center gap-2">
-                          {assignment.resource_type && <ResourceTypeBadge type={assignment.resource_type} />}
-                          <span className="font-medium text-text-primary">
-                            {assignment.resource_name || assignment.resource_id || 'Unknown'}
-                          </span>
+                      <TableCell className="p-3">
+                        <div className="flex flex-col gap-1 min-w-0">
+                          <div className="flex items-center gap-2 min-w-0">
+                            {assignment.resource_type && <ResourceTypeBadge type={assignment.resource_type} />}
+                            <span className="font-medium text-text-primary">
+                              {assignment.resource_name || assignment.resource_id || 'Unknown'}
+                            </span>
+                          </div>
+                          {assignment.resource_contact && (
+                            <span className="text-xs text-text-muted flex items-center gap-1">
+                              <span className="w-1.5 h-1.5 rounded-full bg-text-muted flex-shrink-0" />
+                              {assignment.resource_contact}
+                            </span>
+                          )}
                         </div>
                       </TableCell>
-                      <TableCell className="hidden md:table-cell p-3">
-                        <Badge variant="outline" className="text-xs">
+                      <TableCell className="hidden sm:table-cell p-3">
+                        <Badge variant="outline" className="text-xs whitespace-nowrap">
                           {assignment.resource_type?.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase()) || 'Unknown'}
                         </Badge>
                       </TableCell>
@@ -254,18 +265,18 @@ export function AssignmentsPage() {
                         <StatusBadge status={assignment.status} type="assignment" />
                       </TableCell>
                       <TableCell className="hidden lg:table-cell p-3">
-                        <div>
-                          <div className="font-mono text-xs text-text-primary truncate max-w-[120px]">
+                        <div className="min-w-0">
+                          <div className="font-mono text-xs text-text-primary truncate">
                             {assignment.incident?.id.slice(0, 12)}...
                           </div>
-                          <div className="text-xs text-text-muted truncate max-w-[120px]">
+                          <div className="text-xs text-text-muted truncate">
                             {assignment.incident?.description}
                           </div>
                         </div>
                       </TableCell>
                       <TableCell className="hidden lg:table-cell p-3">
-                        <Badge variant="outline" className="text-xs">
-                          {assignment.incident?.incident_type?.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase()) || 'Unknown'}
+                        <Badge variant="outline" className="text-xs whitespace-nowrap capitalize">
+                          {assignment.incident?.incident_type?.replace('_', ' ') || 'Unknown'}
                         </Badge>
                       </TableCell>
                       <TableCell className="hidden lg:table-cell p-3">
@@ -275,8 +286,8 @@ export function AssignmentsPage() {
                       </TableCell>
                       <TableCell className="p-3">
                         {assignment.eta_minutes ? (
-                          <span className="flex items-center gap-1 text-sm text-text-secondary">
-                            <Clock className="h-3.5 w-3.5" />
+                          <span className="flex items-center gap-1 text-sm text-text-secondary whitespace-nowrap">
+                            <Clock className="h-3.5 w-3.5 flex-shrink-0" />
                             {assignment.eta_minutes} min
                           </span>
                         ) : (
@@ -325,15 +336,13 @@ function StatusUpdateDialog({ open, onClose, assignment, onConfirm, isPending })
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>Update Assignment Status</DialogTitle>
-          <DialogDescription>
-            Current status: <strong>{assignment.status.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase())}</strong>
-            <br />
-            Resource: {assignment.resource_name || assignment.resource_id}
-            <br />
-            Incident: {assignment.incident?.id?.slice(0, 12)}...
+          <DialogDescription className="space-y-1">
+            <div>Current status: <strong>{assignment.status.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase())}</strong></div>
+            <div>Resource: {assignment.resource_name || assignment.resource_id}</div>
+            <div>Incident: {assignment.incident?.id?.slice(0, 12)}...</div>
           </DialogDescription>
         </DialogHeader>
         <div className="grid grid-cols-2 gap-2 py-4">
@@ -344,18 +353,18 @@ function StatusUpdateDialog({ open, onClose, assignment, onConfirm, isPending })
               onClick={() => setSelectedStatus(status)}
               disabled={status === assignment.status}
               className={cn(
-                'p-3 rounded-lg border-2 text-sm font-medium transition-all',
+                'p-3 rounded-lg border-2 text-sm font-medium transition-all min-h-[56px] flex items-center justify-center',
                 selectedStatus === status
                   ? 'border-primary bg-primary-light text-primary'
                   : 'border-border hover:border-primary-hover hover:bg-background-tertiary',
                 status === assignment.status && 'opacity-50 cursor-not-allowed'
               )}
             >
-              <StatusBadge status={status} type="assignment" className="w-full justify-center" />
+              <span className="capitalize">{status.replace('_', ' ')}</span>
             </button>
           ))}
         </div>
-        <DialogFooter>
+        <DialogFooter className="flex justify-end gap-2">
           <Button variant="outline" onClick={onClose} disabled={isPending}>Cancel</Button>
           <Button variant="default" onClick={() => { onConfirm(selectedStatus); onClose(); }} disabled={isPending || selectedStatus === assignment?.status}>
             {isPending ? 'Updating...' : 'Confirm Update'}

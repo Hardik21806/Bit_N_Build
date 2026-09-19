@@ -44,7 +44,7 @@ export const resourceApi = {
   assign: (data) => api.post(API_ENDPOINTS.RESOURCE_ASSIGN, data),
   getAssignments: (incidentId) => api.get(API_ENDPOINTS.RESOURCE_ASSIGNMENTS(incidentId)),
   getAllAssignments: (params = {}) => api.get(API_ENDPOINTS.RESOURCE_ASSIGNMENTS_ALL, { params }),
-  updateAssignmentStatus: (id, status) => api.patch(`/assignments/${id}/status`, { status }),
+  updateAssignmentStatus: (id, status) => api.patch(`/resources/assignments/${id}/status`, { status }),
 };
 
 export const dashboardApi = {

@@ -180,9 +180,9 @@ export function useUpdateAssignmentStatus() {
   return useMutation({
     mutationFn: ({ id, status }) => resourceApi.updateAssignmentStatus(id, status),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['assignments'] });
-      queryClient.invalidateQueries({ queryKey: ['incidents'] });
-      queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+      queryClient.invalidateQueries({ queryKey: ['assignments'], exact: false });
+      queryClient.invalidateQueries({ queryKey: ['incidents'], exact: false });
+      queryClient.invalidateQueries({ queryKey: ['dashboard'], exact: false });
     },
     onError: (error) => {
       console.error('Failed to update assignment status:', parseApiError(error));

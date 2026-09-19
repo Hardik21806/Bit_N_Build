@@ -8,21 +8,15 @@ import {
   DashboardPage, 
   IncidentsPage, 
   ResourcesPage, 
+  AssignmentsPage,
   ReportIncidentPage, 
   IncidentDetailPage,
-  AnalyticsPage 
+  AnalyticsPage,
+  AlertsPage
 } from './pages';
-
-function AssignmentsPage() {
-  return <div className="p-4">Assignments Page - Coming Soon</div>;
-}
 
 function MapPage() {
   return <div className="p-4">Map Page - Coming Soon</div>;
-}
-
-function AlertsPage() {
-  return <div className="p-4">Alerts Page - Coming Soon</div>;
 }
 
 function SettingsPage() {
