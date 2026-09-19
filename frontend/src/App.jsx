@@ -4,62 +4,88 @@ import { QueryProvider } from './lib/queryClient';
 import { TooltipProvider } from './components/ui';
 import { Layout } from './components/layout';
 import { useDashboardWebSocket } from './hooks';
-import { PageLoading } from './components/ui/States';
-
-function DashboardPage() {
-  return <div>Dashboard Page</div>;
-}
-
-function IncidentsPage() {
-  return <div>Incidents Page</div>;
-}
+import { DashboardPage, IncidentsPage } from './pages';
 
 function ReportIncidentPage() {
-  return <div>Report Incident Page</div>;
+  return <div className="p-4">Report Incident Page - Coming Soon</div>;
 }
 
 function ResourcesPage() {
-  return <div>Resources Page</div>;
+  return <div className="p-4">Resources Page - Coming Soon</div>;
 }
 
 function AssignmentsPage() {
-  return <div>Assignments Page</div>;
+  return <div className="p-4">Assignments Page - Coming Soon</div>;
 }
 
 function MapPage() {
-  return <div>Map Page</div>;
+  return <div className="p-4">Map Page - Coming Soon</div>;
 }
 
 function AnalyticsPage() {
-  return <div>Analytics Page</div>;
+  return <div className="p-4">Analytics Page - Coming Soon</div>;
 }
 
 function AlertsPage() {
-  return <div>Alerts Page</div>;
+  return <div className="p-4">Alerts Page - Coming Soon</div>;
 }
 
 function SettingsPage() {
-  return <div>Settings Page</div>;
+  return <div className="p-4">Settings Page - Coming Soon</div>;
 }
 
 function AppContent() {
   useDashboardWebSocket();
   
   return (
-    <Layout>
-      <Routes>
-        <Route path="/" element={<DashboardPage />} />
-        <Route path="/incidents" element={<IncidentsPage />} />
-        <Route path="/incidents/report" element={<ReportIncidentPage />} />
-        <Route path="/resources" element={<ResourcesPage />} />
-        <Route path="/assignments" element={<AssignmentsPage />} />
-        <Route path="/map" element={<MapPage />} />
-        <Route path="/analytics" element={<AnalyticsPage />} />
-        <Route path="/alerts" element={<AlertsPage />} />
-        <Route path="/settings" element={<SettingsPage />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </Layout>
+    <Routes>
+      <Route path="/" element={
+        <Layout>
+          <DashboardPage />
+        </Layout>
+      } />
+      <Route path="/incidents" element={
+        <Layout>
+          <IncidentsPage />
+        </Layout>
+      } />
+      <Route path="/incidents/report" element={
+        <Layout>
+          <ReportIncidentPage />
+        </Layout>
+      } />
+      <Route path="/resources" element={
+        <Layout>
+          <ResourcesPage />
+        </Layout>
+      } />
+      <Route path="/assignments" element={
+        <Layout>
+          <AssignmentsPage />
+        </Layout>
+      } />
+      <Route path="/map" element={
+        <Layout>
+          <MapPage />
+        </Layout>
+      } />
+      <Route path="/analytics" element={
+        <Layout>
+          <AnalyticsPage />
+        </Layout>
+      } />
+      <Route path="/alerts" element={
+        <Layout>
+          <AlertsPage />
+        </Layout>
+      } />
+      <Route path="/settings" element={
+        <Layout>
+          <SettingsPage />
+        </Layout>
+      } />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }
 

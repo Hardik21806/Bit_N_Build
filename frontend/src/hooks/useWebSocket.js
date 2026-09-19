@@ -1,4 +1,5 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { WS_EVENTS } from '../types';
 import { useWebSocketStore } from '../store/uiStore';
 
@@ -56,7 +57,7 @@ export function useWebSocket(onMessage) {
       };
       
       ws.onerror = (error) => {
-        console.error('[WS] Error:', error);
+        console.error('[WS] Connection error - WebSocket failed to connect. Check if backend is running on port 8000 and WS endpoint is /ws/dashboard');
       };
     } catch (err) {
       console.error('[WS] Failed to create connection:', err);
@@ -91,6 +92,7 @@ export function useWebSocket(onMessage) {
 }
 
 export function useDashboardWebSocket() {
+  const queryClient = useQueryClient();
   const { addIncident, updateIncident, removeIncident, updateAlert, addAlert, setResourceAssigned } = useWebSocketStore();
   
   const handleMessage = useCallback((message) => {
@@ -99,12 +101,20 @@ export function useDashboardWebSocket() {
     switch (event) {
       case WS_EVENTS.INCIDENT_CREATED:
         addIncident(data);
+        queryClient.invalidateQueries({ queryKey: ['dashboard', 'overview'] });
+        queryClient.invalidateQueries({ queryKey: ['incidents'] });
         break;
       case WS_EVENTS.INCIDENT_UPDATED:
         updateIncident(data);
+        queryClient.invalidateQueries({ queryKey: ['dashboard', 'overview'] });
+        queryClient.invalidateQueries({ queryKey: ['incident', data.id] });
+        queryClient.invalidateQueries({ queryKey: ['incidents'] });
         break;
       case WS_EVENTS.INCIDENT_CONSOLIDATED:
         updateIncident(data);
+        queryClient.invalidateQueries({ queryKey: ['dashboard', 'overview'] });
+        queryClient.invalidateQueries({ queryKey: ['incident', data.id] });
+        queryClient.invalidateQueries({ queryKey: ['incidents'] });
         break;
       case WS_EVENTS.INCIDENT_ESCALATED:
         addAlert({
@@ -115,14 +125,19 @@ export function useDashboardWebSocket() {
           status: 'active',
           created_at: new Date().toISOString(),
         });
+        queryClient.invalidateQueries({ queryKey: ['dashboard', 'alerts'] });
         break;
       case WS_EVENTS.RESOURCE_ASSIGNED:
         setResourceAssigned(data.assignment, data.incident_id);
+        queryClient.invalidateQueries({ queryKey: ['dashboard', 'overview'] });
+        queryClient.invalidateQueries({ queryKey: ['assignments', data.incident_id] });
+        queryClient.invalidateQueries({ queryKey: ['resources', 'available'] });
+        queryClient.invalidateQueries({ queryKey: ['resources'] });
         break;
       default:
         console.log('[WS] Unknown event:', event);
     }
-  }, [addIncident, updateIncident, removeIncident, addAlert, setResourceAssigned]);
+  }, [addIncident, updateIncident, removeIncident, addAlert, setResourceAssigned, queryClient]);
   
   return useWebSocket(handleMessage);
 }

@@ -151,6 +151,21 @@ export function useAssignments(incidentId) {
   });
 }
 
+export function useAssignmentsForIncidents(incidentIds) {
+  return useQuery({
+    queryKey: ['assignments', 'bulk', incidentIds?.sort().join(',') || ''],
+    queryFn: async () => {
+      if (!incidentIds?.length) return {};
+      const results = await Promise.all(
+        incidentIds.map(id => resourceApi.getAssignments(id).then(r => r.data).catch(() => []))
+      );
+      return Object.fromEntries(incidentIds.map((id, i) => [id, results[i]]));
+    },
+    enabled: !!incidentIds?.length,
+    staleTime: 30000,
+  });
+}
+
 export function useDashboardOverview() {
   return useQuery({
     queryKey: ['dashboard', 'overview'],

@@ -13,6 +13,7 @@ export {
   useResourceRecommendations,
   useAssignResource,
   useAssignments,
+  useAssignmentsForIncidents,
   useDashboardOverview,
   useDashboardAlerts,
   useAcknowledgeAlert,

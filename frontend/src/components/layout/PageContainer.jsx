@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Outlet } from 'react-router-dom';
 import { cn } from '../../lib/utils';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
@@ -13,7 +12,7 @@ export function PageContainer({ children, className }) {
   );
 }
 
-export function Layout() {
+export function Layout({ children }) {
   const { collapsed } = useSidebarStore();
   
   return (
@@ -22,7 +21,7 @@ export function Layout() {
       <div className={cn('flex flex-col flex-1 transition-all duration-300', collapsed ? 'ml-16 lg:ml-16' : 'ml-64 lg:ml-64')}>
         <Header />
         <PageContainer>
-          <Outlet />
+          {children}
         </PageContainer>
       </div>
     </div>
