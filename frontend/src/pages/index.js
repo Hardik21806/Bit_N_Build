@@ -6,3 +6,4 @@ export { IncidentDetailPage } from './IncidentDetailPage';
 export { AssignmentsPage } from './AssignmentsPage';
 export { default as AnalyticsPage } from './AnalyticsPage';
 export { default as MapPage } from './MapPage';
+export { AlertsPage } from './AlertsPage';

@@ -12,12 +12,9 @@ import {
   IncidentDetailPage,
   AnalyticsPage,
   MapPage,
-  AssignmentsPage
+  AssignmentsPage,
+  AlertsPage
 } from './pages';
-
-function AlertsPage() {
-  return <div className="p-4">Alerts Page - Coming Soon</div>;
-}
 
 function SettingsPage() {
   return <div className="p-4">Settings Page - Coming Soon</div>;
