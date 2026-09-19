@@ -14,6 +14,8 @@ export {
   useAssignResource,
   useAssignments,
   useAssignmentsForIncidents,
+  useAllAssignments,
+  useUpdateAssignmentStatus,
   useDashboardOverview,
   useDashboardAlerts,
   useAllDashboardAlerts,

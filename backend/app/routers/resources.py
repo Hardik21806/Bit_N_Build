@@ -114,3 +114,23 @@ def get_assignments(incident_id: str):
         return db.select("assignments", filters={"incident_id": incident_id})
     except db.DBError as exc:
         raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+
+@router.patch("/assignments/{assignment_id}/status")
+async def update_assignment_status(assignment_id: str, status: str):
+    valid = {"assigned", "en_route", "on_scene", "completed", "cancelled"}
+    if status not in valid:
+        raise HTTPException(status_code=400, detail=f"status must be one of {valid}")
+    assignment = db.select_one("assignments", {"id": assignment_id})
+    if not assignment:
+        raise HTTPException(status_code=404, detail="Assignment not found")
+    try:
+        result = db.update("assignments", {"id": assignment_id}, {"status": status})
+        updated = result[0]
+        try:
+            await manager.broadcast("assignment_updated", updated)
+        except Exception:  # noqa: BLE001
+            logger.exception("Assignment update broadcast failed (non-fatal)")
+        return updated
+    except db.DBError as exc:
+        raise HTTPException(status_code=500, detail=str(exc)) from exc
