@@ -193,11 +193,11 @@ export function ReportIncidentPage() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in max-w-4xl mx-auto">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div className="space-y-5 animate-fade-in max-w-4xl mx-auto">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-text-primary">Report New Incident</h1>
-          <p className="text-sm text-text-muted mt-1">Submit a new emergency incident report</p>
+          <h1 className="text-page-title text-text-primary">Report New Incident</h1>
+          <p className="text-secondary text-text-muted mt-0.5">Submit a new emergency incident report</p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={() => navigate('/incidents')}>
@@ -209,12 +209,11 @@ export function ReportIncidentPage() {
 
       {submitSuccess && (
         <Alert
-          variant="default"
-          className="bg-severity-low-light border-severity-low"
+          variant="success"
           description={
             <>
               Incident created successfully. ID: <strong className="font-mono">{submitSuccess.id}</strong>
-              <Button variant="ghost" size="sm" className="ml-4" onClick={() => navigate(`/incidents/${submitSuccess.id}`)}>
+              <Button variant="ghost" size="sm" className="ml-3" onClick={() => navigate(`/incidents/${submitSuccess.id}`)}>
                 View Details
               </Button>
             </>
@@ -227,7 +226,6 @@ export function ReportIncidentPage() {
       {submitError && (
         <Alert
           variant="destructive"
-          className="bg-severity-critical-light border-severity-critical"
           description={submitError}
         >
           <XCircle className="h-4 w-4 text-severity-critical" />
@@ -236,15 +234,15 @@ export function ReportIncidentPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Incident Details</CardTitle>
+          <CardTitle className="text-sm">Incident Details</CardTitle>
           <CardDescription className="text-sm">
             All fields marked with <span className="text-severity-critical">*</span> are required
           </CardDescription>
         </CardHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-6 p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
+        <form onSubmit={handleSubmit} className="space-y-5 p-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="space-y-1.5">
               <Label htmlFor="source" className="flex items-center gap-1">
                 Source <span className="text-severity-critical">*</span>
               </Label>
@@ -263,7 +261,7 @@ export function ReportIncidentPage() {
               )}
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <Label htmlFor="incident_type" className="flex items-center gap-1">
                 Incident Type <span className="text-severity-critical">*</span>
               </Label>
@@ -283,7 +281,7 @@ export function ReportIncidentPage() {
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             <Label htmlFor="description" className="flex items-center gap-1">
               Description <span className="text-severity-critical">*</span>
             </Label>
@@ -306,11 +304,11 @@ export function ReportIncidentPage() {
 
           <Separator />
 
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             <Label className="flex items-center gap-1">
               Location <span className="text-severity-critical">*</span>
             </Label>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <div className="space-y-1">
                 <Label htmlFor="lat" className="text-xs text-text-muted">Latitude</Label>
                 <Input
@@ -362,7 +360,7 @@ export function ReportIncidentPage() {
 
           <Separator />
 
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             <Label htmlFor="reporter_contact" className="flex items-center gap-1">
               Reporter Contact (Optional)
             </Label>
@@ -376,7 +374,7 @@ export function ReportIncidentPage() {
             />
           </div>
 
-          <CardFooter className="flex flex-col sm:flex-row gap-4 pt-6 border-t">
+          <CardFooter className="flex flex-col sm:flex-row gap-3 pt-5 border-t">
             <Button type="submit" disabled={isSubmitting || createIncident.isPending} className="w-full sm:w-auto">
               {isSubmitting || createIncident.isPending ? (
                 <>
@@ -399,7 +397,7 @@ export function ReportIncidentPage() {
 
       <Card className="border-border">
         <CardHeader>
-          <CardTitle className="text-base flex items-center gap-2">
+          <CardTitle className="text-sm flex items-center gap-2">
             <AlertTriangle className="h-4 w-4 text-severity-medium" />
             Submission Guidelines
           </CardTitle>

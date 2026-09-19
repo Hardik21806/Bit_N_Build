@@ -11,18 +11,18 @@ const Alert = ({ className, variant = 'default', title, description, children, .
     success: CheckCircle,
     warning: AlertTriangle,
   };
-  
+
   const Icon = icons[variant] || Info;
-  
+
   const baseStyles = 'relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-text-secondary';
-  
+
   const variantStyles = {
     default: 'bg-primary-light border-primary text-primary',
     destructive: 'bg-severity-critical-light border-severity-critical text-severity-critical-text',
     success: 'bg-severity-low-light border-severity-low text-severity-low-text',
     warning: 'bg-severity-medium-light border-severity-medium text-severity-medium-text',
   };
-  
+
   return (
     <div className={cn(baseStyles, variantStyles[variant], className)} {...props}>
       <Icon className="h-4 w-4" />
@@ -41,8 +41,8 @@ function AlertDialog({ open, onOpenChange, title, description, confirmText = 'Co
   return (
     <AlertPrimitive.Root open={open} onOpenChange={onOpenChange}>
       <AlertPrimitive.Portal>
-        <AlertPrimitive.Overlay className="fixed inset-0 z-50 bg-black/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
-        <AlertPrimitive.Content className="fixed left-[50%] top-[50%] z-50 w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 rounded-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]">
+        <AlertPrimitive.Overlay className="fixed inset-0 z-50 bg-black/40 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
+        <AlertPrimitive.Content className="fixed left-[50%] top-[50%] z-50 w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-180 rounded-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]">
           <AlertPrimitive.Title className="text-lg font-semibold">{title}</AlertPrimitive.Title>
           <AlertPrimitive.Description className="text-sm text-text-muted">{description}</AlertPrimitive.Description>
           {children}
@@ -65,16 +65,16 @@ function InlineAlert({ type = 'info', title, children, dismissible = false, onDi
     error: AlertCircle,
     success: CheckCircle,
   };
-  
+
   const colors = {
     info: 'bg-primary-light border-primary text-primary',
     warning: 'bg-severity-medium-light border-severity-medium text-severity-medium-text',
     error: 'bg-severity-critical-light border-severity-critical text-severity-critical-text',
     success: 'bg-severity-low-light border-severity-low text-severity-low-text',
   };
-  
+
   const Icon = icons[type] || Info;
-  
+
   return (
     <div className={cn('relative rounded-lg border p-4 flex gap-3', colors[type], className)} role="alert">
       <Icon className="h-5 w-5 flex-shrink-0 mt-0.5" />

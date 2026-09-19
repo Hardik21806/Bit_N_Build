@@ -75,33 +75,28 @@ export function ResourcesPage() {
 
   if (isError) {
     return (
-      <div className="space-y-6 animate-fade-in">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="space-y-5 animate-fade-in">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-bold text-text-primary">Resources</h1>
-            <p className="text-sm text-text-muted mt-1">Manage and monitor emergency response resources</p>
+            <h1 className="text-page-title text-text-primary">Resources</h1>
+            <p className="text-secondary text-text-muted mt-0.5">Manage and monitor emergency response resources</p>
           </div>
         </div>
-        <div className="flex justify-center py-12">
-          <div className="text-center">
-            <h3 className="text-lg font-medium text-text-primary mb-2">Failed to load resources</h3>
-            <p className="text-text-muted mb-4">{error?.userMessage || 'Unable to connect to the server'}</p>
-            <Button variant="outline" onClick={() => refetch()}>
-              <RefreshCw className="h-4 w-4 mr-2" />
-              Retry
-            </Button>
-          </div>
-        </div>
+        <ErrorState
+          title="Failed to load resources"
+          description={error?.userMessage || 'Unable to connect to the server'}
+          onRetry={() => refetch()}
+        />
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div className="space-y-5 animate-fade-in">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-text-primary">Resources</h1>
-          <p className="text-sm text-text-muted mt-1">Manage and monitor emergency response resources</p>
+          <h1 className="text-page-title text-text-primary">Resources</h1>
+          <p className="text-secondary text-text-muted mt-0.5">Manage and monitor emergency response resources</p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={() => refetch()} disabled={isLoading}>
@@ -111,7 +106,7 @@ export function ResourcesPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <StatCard title="Total Resources" value={resources.length} icon={Truck} iconColor="bg-primary-light text-primary" />
         <StatCard title="Available" value={availableCount} icon={Truck} iconColor="bg-severity-low-light text-severity-low" />
         <StatCard title="Dispatched" value={dispatchedCount} icon={Truck} iconColor="bg-severity-medium-light text-severity-medium" />
@@ -120,9 +115,9 @@ export function ResourcesPage() {
 
       <Card>
         <CardHeader>
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <CardTitle className="text-base">Resource Directory</CardTitle>
-            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <CardTitle className="text-sm">Resource Directory</CardTitle>
+            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
               <div className="relative flex-1 max-w-xs">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-muted" />
                 <Input
@@ -133,7 +128,7 @@ export function ResourcesPage() {
                 />
               </div>
               <Select value={typeFilter} onValueChange={setTypeFilter}>
-                <SelectTrigger className="w-full sm:w-[160px]">
+                <SelectTrigger className="w-full sm:w-[150px]">
                   <SelectValue placeholder="All Types" />
                 </SelectTrigger>
                 <SelectContent>
@@ -144,7 +139,7 @@ export function ResourcesPage() {
                 </SelectContent>
               </Select>
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-full sm:w-[160px]">
+                <SelectTrigger className="w-full sm:w-[150px]">
                   <SelectValue placeholder="All Status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -165,56 +160,56 @@ export function ResourcesPage() {
               description={searchQuery || typeFilter !== 'all' || statusFilter !== 'all'
                 ? 'Try adjusting your filters or search query.'
                 : 'No resources have been added yet.'}
-              className="py-12"
+              className="py-10"
             />
           ) : (
-            <ScrollArea className="max-h-[600px]">
+            <ScrollArea className="max-h-[560px]">
               <Table>
                 <TableHeader>
                   <TableRow>
                     <TableHead>Resource</TableHead>
                     <TableHead className="hidden md:table-cell">Type</TableHead>
-                    <TableHead className="w-36">Status</TableHead>
-                    <TableHead className="w-24">Capacity</TableHead>
+                    <TableHead className="w-28">Status</TableHead>
+                    <TableHead className="w-20">Capacity</TableHead>
                     <TableHead className="hidden lg:table-cell">Location</TableHead>
-                    <TableHead className="w-56">Contact</TableHead>
-                    <TableHead className="w-48">Added</TableHead>
+                    <TableHead className="w-52">Contact</TableHead>
+                    <TableHead className="w-36">Added</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {filteredResources.map((resource) => (
                     <TableRow key={resource.id}>
-                      <TableCell className="p-3">
+                      <TableCell className="p-2.5">
                         <div className="font-medium text-text-primary truncate max-w-xs">{resource.name}</div>
                         <div className="text-xs text-text-muted truncate max-w-xs mt-0.5 font-mono">
                           {resource.id.slice(0, 12)}...
                         </div>
                       </TableCell>
-                      <TableCell className="hidden md:table-cell p-3">
+                      <TableCell className="hidden md:table-cell p-2.5">
                         <ResourceTypeBadge type={resource.resource_type} />
                       </TableCell>
-                      <TableCell className="p-3">
+                      <TableCell className="p-2.5">
                         <StatusBadge status={resource.status} type="resource" />
                       </TableCell>
-                      <TableCell className="p-3">
-                        <div className="flex items-center gap-1 text-sm text-text-secondary">
+                      <TableCell className="p-2.5">
+                        <div className="flex items-center gap-1 text-sm text-text-secondary tabular-nums">
                           <Users className="h-3.5 w-3.5" />
                           {resource.capacity}
                         </div>
                       </TableCell>
-                      <TableCell className="hidden lg:table-cell p-3">
+                      <TableCell className="hidden lg:table-cell p-2.5">
                         <div className="flex items-center gap-1 text-sm text-text-muted">
                           <MapPin className="h-3.5 w-3.5" />
                           {resource.location_lat?.toFixed(4)}, {resource.location_lng?.toFixed(4)}
                         </div>
                       </TableCell>
-                      <TableCell className="p-3">
-                        <div className="flex items-center gap-1 text-sm text-text-secondary truncate max-w-[200px]">
+                      <TableCell className="p-2.5">
+                        <div className="flex items-center gap-1 text-sm text-text-secondary truncate max-w-[180px]">
                           <Phone className="h-3.5 w-3.5 flex-shrink-0" />
                           {resource.contact}
                         </div>
                       </TableCell>
-                      <TableCell className="p-3">
+                      <TableCell className="p-2.5">
                         <span className="text-sm text-text-secondary whitespace-nowrap">
                           {formatDate(resource.created_at)}
                         </span>
@@ -234,14 +229,14 @@ export function ResourcesPage() {
 function StatCard({ title, value, icon: Icon, iconColor }) {
   return (
     <Card>
-      <CardContent className="p-6">
-        <div className="flex items-start justify-between">
-          <div>
+      <CardContent className="p-4">
+        <div className="flex items-start justify-between gap-4">
+          <div className="min-w-0">
             <p className="text-sm font-medium text-text-secondary">{title}</p>
-            <p className="text-3xl font-bold text-text-primary mt-1">{value}</p>
+            <p className="text-stat text-text-primary mt-0.5">{value}</p>
           </div>
-          <div className={cn('p-3 rounded-lg', iconColor)}>
-            <Icon className="h-6 w-6" aria-hidden="true" />
+          <div className={cn('p-2.5 rounded-lg flex-shrink-0', iconColor)}>
+            <Icon className="h-5 w-5" aria-hidden="true" />
           </div>
         </div>
       </CardContent>
@@ -251,10 +246,10 @@ function StatCard({ title, value, icon: Icon, iconColor }) {
 
 function ResourcesSkeleton() {
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+    <div className="space-y-5 animate-fade-in">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[1, 2, 3, 4].map((i) => (
-          <Card key={i}><CardContent className="p-6"><Skeleton variant="text" width="40%" className="mb-2" /><Skeleton variant="text" width="60%" /></CardContent></Card>
+          <Card key={i}><CardContent className="p-4"><Skeleton variant="text" width="40%" className="mb-2" /><Skeleton variant="text" width="60%" /></CardContent></Card>
         ))}
       </div>
       <Card>

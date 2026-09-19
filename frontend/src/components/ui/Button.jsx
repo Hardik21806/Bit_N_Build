@@ -3,7 +3,7 @@ import { Slot } from '@radix-ui/react-slot';
 import { cn } from '../../lib/utils';
 
 const buttonVariants = {
-  base: 'inline-flex items-center justify-center gap-2 rounded-md font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]',
+  base: 'inline-flex items-center justify-center gap-2 rounded-md font-medium transition-all duration-180 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]',
   variants: {
     default: 'bg-primary text-white hover:bg-primary-hover shadow-sm',
     destructive: 'bg-severity-critical text-white hover:bg-severity-critical-dark shadow-sm',
@@ -13,11 +13,11 @@ const buttonVariants = {
     link: 'text-primary underline-offset-4 hover:underline',
   },
   sizes: {
-    default: 'h-10 px-4 py-2 text-sm',
-    sm: 'h-9 rounded-md px-3 text-xs',
-    lg: 'h-11 rounded-md px-8 text-base',
-    xl: 'h-12 rounded-lg px-10 text-lg',
-    icon: 'h-10 w-10',
+    default: 'h-9 px-3.5 text-sm',
+    sm: 'h-8 rounded-md px-2.5 text-xs',
+    lg: 'h-10 rounded-md px-6 text-base',
+    xl: 'h-11 rounded-lg px-8 text-lg',
+    icon: 'h-9 w-9',
   },
 };
 

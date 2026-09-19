@@ -4,7 +4,6 @@ import { cn } from '../../lib/utils';
 import {
   LayoutDashboard,
   AlertTriangle,
-  List,
   PlusCircle,
   Truck,
   BarChart2,
@@ -29,90 +28,431 @@ const navigation = [
   { name: 'Settings', href: '/settings', icon: Settings },
 ];
 
+const primaryActions = [
+  {
+    name: 'New Incident',
+    href: '/incidents/report',
+    icon: PlusCircle,
+  },
+  {
+    name: 'Dispatch Resource',
+    href: '/assignments',
+    icon: Truck,
+  },
+];
+
 export function Sidebar() {
   const location = useLocation();
   const { collapsed, toggleCollapsed } = useSidebarStore();
-  
+
   return (
     <aside
       className={cn(
-        'fixed left-0 top-0 z-40 h-screen bg-background border-r border-border transition-all duration-300 flex flex-col',
-        collapsed ? 'w-16' : 'w-64'
+        'fixed left-0 top-0 z-40 h-screen flex flex-col',
+        'bg-[#f7f6f2] border-r border-[#dfddd7]',
+        'transition-[width] duration-200 ease-out',
+        collapsed ? 'w-[72px]' : 'w-[260px]'
       )}
       aria-label="Main navigation"
     >
-      <div className={cn('flex h-16 items-center justify-between px-4 border-b border-border', collapsed && 'justify-center')}>
-        {!collapsed && (
-          <span className="text-lg font-bold text-text-primary">EmergencyOps</span>
+
+      {/* =====================================================
+          BRAND HEADER
+      ===================================================== */}
+
+      <div
+        className={cn(
+          'relative flex h-[72px] shrink-0 items-center',
+          'border-b border-[#dfddd7]',
+          collapsed
+            ? 'justify-center px-2'
+            : 'justify-between px-4'
         )}
+      >
+        {!collapsed && (
+          <div className="flex items-center gap-3">
+
+            {/* Brand mark */}
+            <div
+              className="
+                relative flex h-9 w-9 shrink-0
+                items-center justify-center
+                rounded-[10px]
+                bg-[#183b63]
+                text-white
+                shadow-[0_2px_5px_rgba(24,59,99,0.18)]
+              "
+            >
+              <span
+                className="
+                  font-display
+                  text-[15px]
+                  font-bold
+                  tracking-[-0.04em]
+                "
+              >
+                EO
+              </span>
+
+              {/* small emergency accent */}
+              <span
+                className="
+                  absolute
+                  -right-0.5
+                  -top-0.5
+                  h-2
+                  w-2
+                  rounded-full
+                  bg-[#d97706]
+                  ring-2
+                  ring-[#f7f6f2]
+                "
+              />
+            </div>
+
+            {/* Brand name */}
+            <div className="leading-none">
+              <div
+                className="
+                  font-display
+                  text-[19px]
+                  font-bold
+                  tracking-[-0.045em]
+                  text-[#201e1b]
+                "
+              >
+                EmergencyOps
+              </div>
+
+              <div
+                className="
+                  mt-1
+                  text-[9px]
+                  font-semibold
+                  uppercase
+                  tracking-[0.16em]
+                  text-[#89847b]
+                "
+              >
+                Response Command
+              </div>
+            </div>
+          </div>
+        )}
+
+        {collapsed && (
+          <div
+            className="
+              relative flex h-9 w-9
+              items-center justify-center
+              rounded-[10px]
+              bg-[#183b63]
+              text-white
+            "
+          >
+            <span
+              className="
+                font-display
+                text-[14px]
+                font-bold
+                tracking-[-0.04em]
+              "
+            >
+              EO
+            </span>
+
+            <span
+              className="
+                absolute
+                -right-0.5
+                -top-0.5
+                h-2
+                w-2
+                rounded-full
+                bg-[#d97706]
+                ring-2
+                ring-[#f7f6f2]
+              "
+            />
+          </div>
+        )}
+
+        {/* Collapse button */}
         <button
           onClick={toggleCollapsed}
           className={cn(
-            'p-2 rounded-md text-text-muted hover:bg-background-tertiary hover:text-text-primary transition-colors',
-            collapsed && 'mx-auto'
+            `
+              flex h-7 w-7 shrink-0 items-center justify-center
+              rounded-md
+              text-[#817c74]
+              transition-all duration-150
+              hover:bg-[#ebe9e3]
+              hover:text-[#201e1b]
+              focus-visible:outline-none
+              focus-visible:ring-2
+              focus-visible:ring-[#2457a6]
+            `,
+            collapsed && 'absolute right-2 top-3'
           )}
-          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          aria-label={
+            collapsed
+              ? 'Expand sidebar'
+              : 'Collapse sidebar'
+          }
           aria-expanded={!collapsed}
         >
-          {collapsed ? <ChevronRight className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />}
+          {collapsed ? (
+            <ChevronRight className="h-[17px] w-[17px]" />
+          ) : (
+            <ChevronLeft className="h-[17px] w-[17px]" />
+          )}
         </button>
       </div>
-      
-      <nav className="flex-1 overflow-y-auto p-3 space-y-1" aria-label="Navigation">
-        {navigation.map((item) => {
-          const isActive = location.pathname === item.href || 
-            (item.href !== '/' && location.pathname.startsWith(item.href));
-          const Icon = item.icon;
-          
-          return (
-            <NavLink
-              key={item.name}
-              to={item.href}
-              className={({ isActive: active }) => cn(
-                'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
-                active
-                  ? 'bg-primary-light text-primary'
-                  : 'text-text-secondary hover:bg-background-tertiary hover:text-text-primary',
-                collapsed && 'justify-center'
-              )}
-              aria-current={isActive ? 'page' : undefined}
-              title={collapsed ? item.name : undefined}
-            >
-              <Icon className={cn('h-5 w-5 flex-shrink-0', isActive && 'text-primary')} aria-hidden="true" />
-              {!collapsed && <span>{item.name}</span>}
-            </NavLink>
-          );
-        })}
+
+
+      {/* =====================================================
+          NAVIGATION
+      ===================================================== */}
+
+      <nav
+        className="
+          flex-1
+          overflow-y-auto
+          px-3
+          py-5
+          scrollbar-thin
+        "
+        aria-label="Navigation"
+      >
+
+        {!collapsed && (
+          <div
+            className="
+              mb-2
+              px-3
+              text-[9px]
+              font-semibold
+              uppercase
+              tracking-[0.17em]
+              text-[#969188]
+            "
+          >
+            Operations
+          </div>
+        )}
+
+        <div className="space-y-1">
+
+          {navigation.map((item) => {
+            const isActive =
+              location.pathname === item.href ||
+              (
+                item.href !== '/' &&
+                location.pathname.startsWith(item.href)
+              );
+
+            const Icon = item.icon;
+
+            return (
+              <NavLink
+                key={item.name}
+                to={item.href}
+                className={cn(
+                  `
+                    group
+                    relative
+                    flex
+                    h-11
+                    items-center
+                    gap-3
+                    rounded-[9px]
+                    px-3
+                    text-[14px]
+                    font-medium
+                    transition-all
+                    duration-150
+                    focus-visible:outline-none
+                    focus-visible:ring-2
+                    focus-visible:ring-[#2457a6]
+                    focus-visible:ring-offset-1
+                  `,
+
+                  isActive
+                    ? `
+                      bg-[#eaf1fb]
+                      text-[#1f5598]
+                    `
+                    : `
+                      text-[#5e5a54]
+                      hover:bg-[#eeece7]
+                      hover:text-[#292724]
+                    `,
+
+                  collapsed &&
+                    'justify-center px-0'
+                )}
+                aria-current={
+                  isActive ? 'page' : undefined
+                }
+                title={
+                  collapsed
+                    ? item.name
+                    : undefined
+                }
+              >
+
+                {/* Active indicator */}
+                {isActive && (
+                  <span
+                    className="
+                      absolute
+                      left-0
+                      top-2.5
+                      h-6
+                      w-[3px]
+                      rounded-r-full
+                      bg-[#2457a6]
+                    "
+                  />
+                )}
+
+                <Icon
+                  className={cn(
+                    'h-[19px] w-[19px] shrink-0 transition-colors',
+
+                    isActive
+                      ? 'text-[#2457a6]'
+                      : 'text-[#706b64] group-hover:text-[#3d3934]'
+                  )}
+                  strokeWidth={1.8}
+                  aria-hidden="true"
+                />
+
+                {!collapsed && (
+                  <span className="truncate">
+                    {item.name}
+                  </span>
+                )}
+
+                {/* Special incident marker */}
+                {!collapsed &&
+                  item.name === 'Active Incidents' && (
+                    <span
+                      className={cn(
+                        `
+                          ml-auto
+                          h-1.5
+                          w-1.5
+                          rounded-full
+                        `,
+                        isActive
+                          ? 'bg-[#c2410c]'
+                          : 'bg-[#b8b3aa]'
+                      )}
+                    />
+                  )}
+              </NavLink>
+            );
+          })}
+
+        </div>
       </nav>
-      
-      <div className={cn('p-3 border-t border-border', collapsed && 'hidden')}>
-        <div className="rounded-lg bg-background-tertiary p-3">
-          <p className="text-xs font-medium text-text-secondary uppercase tracking-wider mb-2">Quick Actions</p>
-          <div className="space-y-2">
-            <NavLink
-              to="/incidents/report"
-              className={({ isActive }) => cn(
-                'w-full flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-                isActive ? 'bg-primary-light text-primary' : 'text-text-secondary hover:bg-background hover:text-text-primary'
-              )}
-            >
-              <PlusCircle className="h-4 w-4" />
-              <span>New Incident</span>
-            </NavLink>
-            <NavLink
-              to="/assignments"
-              className={({ isActive }) => cn(
-                'w-full flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-                isActive ? 'bg-primary-light text-primary' : 'text-text-secondary hover:bg-background hover:text-text-primary'
-              )}
-            >
-              <Truck className="h-4 w-4" />
-              <span>Dispatch Resource</span>
-            </NavLink>
+
+
+      {/* =====================================================
+          QUICK ACTIONS
+      ===================================================== */}
+
+      {!collapsed && (
+        <div
+          className="
+            shrink-0
+            border-t
+            border-[#dfddd7]
+            bg-[#f3f1ec]
+            px-3
+            py-4
+          "
+        >
+
+          <div
+            className="
+              mb-2.5
+              px-3
+              text-[9px]
+              font-semibold
+              uppercase
+              tracking-[0.17em]
+              text-[#89847b]
+            "
+          >
+            Quick Actions
+          </div>
+
+          <div className="space-y-1">
+
+            {primaryActions.map((item) => {
+              const isActive =
+                location.pathname === item.href;
+
+              const Icon = item.icon;
+
+              return (
+                <NavLink
+                  key={item.name}
+                  to={item.href}
+                  className={cn(
+                    `
+                      group
+                      flex
+                      h-10
+                      items-center
+                      gap-3
+                      rounded-[8px]
+                      border
+                      px-3
+                      text-[13px]
+                      font-medium
+                      transition-all
+                      duration-150
+                    `,
+
+                    isActive
+                      ? `
+                        border-[#c9d8eb]
+                        bg-[#eaf1fb]
+                        text-[#2457a6]
+                      `
+                      : `
+                        border-transparent
+                        text-[#5e5a54]
+                        hover:border-[#ddd9d1]
+                        hover:bg-[#faf9f6]
+                        hover:text-[#292724]
+                      `
+                  )}
+                  aria-current={
+                    isActive ? 'page' : undefined
+                  }
+                >
+                  <Icon
+                    className={cn(
+                      'h-[17px] w-[17px] shrink-0',
+                      isActive
+                        ? 'text-[#2457a6]'
+                        : 'text-[#706b64]'
+                    )}
+                    strokeWidth={1.8}
+                  />
+
+                  <span>{item.name}</span>
+                </NavLink>
+              );
+            })}
+
           </div>
         </div>
-      </div>
+      )}
     </aside>
   );
 }

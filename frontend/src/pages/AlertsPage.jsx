@@ -31,10 +31,10 @@ const statusOptions = [
 ];
 
 const alertTypeConfig = {
-  critical_incident: { label: 'Critical Incident', icon: AlertTriangle, color: 'bg-severity-critical-light text-severity-critical' },
-  delayed_response: { label: 'Delayed Response', icon: Clock, color: 'bg-severity-high-light text-severity-high' },
-  escalation: { label: 'Escalation', icon: AlertTriangle, color: 'bg-severity-high-light text-severity-high' },
-  resource_shortage: { label: 'Resource Shortage', icon: AlertTriangle, color: 'bg-severity-medium-light text-severity-medium' },
+  critical_incident: { label: 'Critical Incident', icon: AlertTriangle, color: 'bg-severity-critical-light text-severity-critical', border: 'border-severity-critical' },
+  delayed_response: { label: 'Delayed Response', icon: Clock, color: 'bg-severity-high-light text-severity-high', border: 'border-severity-high' },
+  escalation: { label: 'Escalation', icon: AlertTriangle, color: 'bg-severity-high-light text-severity-high', border: 'border-severity-high' },
+  resource_shortage: { label: 'Resource Shortage', icon: AlertTriangle, color: 'bg-severity-medium-light text-severity-medium', border: 'border-severity-medium' },
 };
 
 export function AlertsPage() {
@@ -66,14 +66,14 @@ export function AlertsPage() {
 
   if (isError) {
     return (
-      <div className="space-y-6 animate-fade-in">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="space-y-5 animate-fade-in">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-bold text-text-primary">Alerts</h1>
-            <p className="text-sm text-text-muted mt-1">Monitor and manage system alerts</p>
+            <h1 className="text-page-title text-text-primary">Alerts</h1>
+            <p className="text-secondary text-text-muted mt-0.5">Monitor and manage system alerts</p>
           </div>
         </div>
-        <div className="flex justify-center py-12">
+        <div className="flex justify-center py-10">
           <div className="text-center">
             <h3 className="text-lg font-medium text-text-primary mb-2">Failed to load alerts</h3>
             <p className="text-text-muted mb-4">{error?.userMessage || 'Unable to connect to the server'}</p>
@@ -96,11 +96,11 @@ export function AlertsPage() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div className="space-y-5 animate-fade-in">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-text-primary">Alerts</h1>
-          <p className="text-sm text-text-muted mt-1">Monitor and manage system alerts</p>
+          <h1 className="text-page-title text-text-primary">Alerts</h1>
+          <p className="text-secondary text-text-muted mt-0.5">Monitor and manage system alerts</p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={() => refetch()} disabled={isLoading}>
@@ -110,7 +110,7 @@ export function AlertsPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-3 gap-3">
         <StatCard title="Active" value={activeCount} icon={AlertTriangle} iconColor="bg-severity-critical-light text-severity-critical" />
         <StatCard title="Acknowledged" value={acknowledgedCount} icon={Clock} iconColor="bg-severity-high-light text-severity-high" />
         <StatCard title="Resolved" value={resolvedCount} icon={CheckCircle} iconColor="bg-severity-low-light text-severity-low" />
@@ -118,9 +118,9 @@ export function AlertsPage() {
 
       <Card>
         <CardHeader>
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <CardTitle className="text-base">Alert Directory</CardTitle>
-            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <CardTitle className="text-sm">Alert Directory</CardTitle>
+            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
               <div className="relative flex-1 max-w-xs">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-muted" />
                 <Input
@@ -131,7 +131,7 @@ export function AlertsPage() {
                 />
               </div>
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-full sm:w-[180px]">
+                <SelectTrigger className="w-full sm:w-[170px]">
                   <SelectValue placeholder="Filter by status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -153,60 +153,60 @@ export function AlertsPage() {
                 : statusFilter === 'active'
                 ? 'All clear — no active alerts'
                 : `No ${statusFilter} alerts`}
-              className="py-12"
+              className="py-10"
             />
           ) : (
-            <ScrollArea className="max-h-[600px]">
+            <ScrollArea className="max-h-[560px]">
               <Table>
                 <TableHeader>
                   <TableRow>
                     <TableHead className="w-10"></TableHead>
                     <TableHead>Type</TableHead>
-                    <TableHead className="w-32">Status</TableHead>
+                    <TableHead className="w-28">Status</TableHead>
                     <TableHead>Message</TableHead>
-                    <TableHead className="w-48 hidden md:table-cell">Incident</TableHead>
-                    <TableHead className="w-48">Created</TableHead>
+                    <TableHead className="w-44 hidden md:table-cell">Incident</TableHead>
+                    <TableHead className="w-36">Created</TableHead>
                     <TableHead className="w-36">Resolved</TableHead>
-                    <TableHead className="w-36">Actions</TableHead>
+                    <TableHead className="w-28">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {filteredAlerts.map((alert) => (
                     <TableRow key={alert.id}>
-                      <TableCell className="p-3">
+                      <TableCell className="p-2.5">
                         <AlertTypeBadge alert={alert} />
                       </TableCell>
-                      <TableCell className="p-3">
+                      <TableCell className="p-2.5">
                         <AlertTypeLabel alert={alert} />
                       </TableCell>
-                      <TableCell className="p-3">
+                      <TableCell className="p-2.5">
                         <StatusBadge status={alert.status} type="alert" />
                       </TableCell>
-                      <TableCell className="p-3 max-w-[300px]">
-                        <p className="text-sm text-text-secondary truncate max-w-[300px] block">{alert.message}</p>
+                      <TableCell className="p-2.5 max-w-[280px]">
+                        <p className="text-sm text-text-secondary truncate max-w-[280px] block">{alert.message}</p>
                       </TableCell>
-                      <TableCell className="hidden md:table-cell p-3">
+                      <TableCell className="hidden md:table-cell p-2.5">
                         {alert.incident_id && (
-                          <span className="text-sm text-text-muted font-mono truncate block max-w-[120px]">
+                          <span className="text-sm text-text-muted font-mono truncate block max-w-[100px]">
                             {alert.incident_id.slice(0, 12)}...
                           </span>
                         )}
                       </TableCell>
-                      <TableCell className="p-3">
-                        <span className="text-sm text-text-secondary whitespace-nowrap">
+                      <TableCell className="p-2.5">
+                        <span className="text-sm text-text-secondary whitespace-nowrap tabular-nums">
                           {formatRelativeTime(alert.created_at)}
                         </span>
                       </TableCell>
-                      <TableCell className="p-3">
+                      <TableCell className="p-2.5">
                         {alert.resolved_at ? (
-                          <span className="text-sm text-text-secondary whitespace-nowrap">
+                          <span className="text-sm text-text-secondary whitespace-nowrap tabular-nums">
                             {formatRelativeTime(alert.resolved_at)}
                           </span>
                         ) : (
                           <span className="text-sm text-text-muted">—</span>
                         )}
                       </TableCell>
-                      <TableCell className="p-3">
+                      <TableCell className="p-2.5">
                         <AlertActions
                           alert={alert}
                           onAcknowledge={handleAcknowledge}
@@ -230,14 +230,14 @@ export function AlertsPage() {
 function StatCard({ title, value, icon: Icon, iconColor }) {
   return (
     <Card>
-      <CardContent className="p-6">
-        <div className="flex items-start justify-between">
-          <div>
+      <CardContent className="p-4">
+        <div className="flex items-start justify-between gap-4">
+          <div className="min-w-0">
             <p className="text-sm font-medium text-text-secondary">{title}</p>
-            <p className="text-3xl font-bold text-text-primary mt-1">{value}</p>
+            <p className="text-stat text-text-primary mt-0.5">{value}</p>
           </div>
-          <div className={cn('p-3 rounded-lg', iconColor)}>
-            <Icon className="h-6 w-6" aria-hidden="true" />
+          <div className={cn('p-2.5 rounded-lg flex-shrink-0', iconColor)}>
+            <Icon className="h-5 w-5" aria-hidden="true" />
           </div>
         </div>
       </CardContent>
@@ -303,10 +303,10 @@ function AlertActions({ alert, onAcknowledge, onResolve, isAcknowledging, isReso
 
 function AlertsSkeleton() {
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="grid grid-cols-3 gap-4">
+    <div className="space-y-5 animate-fade-in">
+      <div className="grid grid-cols-3 gap-3">
         {[1, 2, 3].map((i) => (
-          <Card key={i}><CardContent className="p-6"><Skeleton variant="text" width="40%" className="mb-2" /><Skeleton variant="text" width="60%" /></CardContent></Card>
+          <Card key={i}><CardContent className="p-4"><Skeleton variant="text" width="40%" className="mb-2" /><Skeleton variant="text" width="60%" /></CardContent></Card>
         ))}
       </div>
       <Card>

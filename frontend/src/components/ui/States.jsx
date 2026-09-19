@@ -8,7 +8,7 @@ function LoadingSpinner({ size = 'md', className, ...props }) {
     md: 'h-8 w-8',
     lg: 'h-12 w-12',
   };
-  
+
   return (
     <svg
       className={cn('animate-spin text-primary', sizes[size], className)}
@@ -37,9 +37,9 @@ function Skeleton({ className, variant = 'text', width, height, ...props }) {
   const variantStyles = {
     text: 'h-4 w-full',
     circular: 'rounded-full',
-    rectangular: 'rounded-lg',
+    rectangular: 'rounded-md',
   };
-  
+
   return (
     <div
       className={cn(baseStyles, variantStyles[variant], className)}
@@ -51,12 +51,12 @@ function Skeleton({ className, variant = 'text', width, height, ...props }) {
 
 function TableSkeleton({ rows = 5, columns = 4 }) {
   return (
-    <div className="relative w-full overflow-auto">
+    <div className="relative w-full overflow-auto scrollbar-thin">
       <table className="w-full caption-bottom text-sm">
         <thead>
           <tr className="border-b border-border">
             {Array.from({ length: columns }).map((_, i) => (
-              <th key={i} className="h-12 px-4 text-left align-middle font-medium text-text-secondary">
+              <th key={i} className="h-10 px-3 text-left align-middle font-medium text-text-muted uppercase tracking-wider">
                 <Skeleton variant="text" width="60%" />
               </th>
             ))}
@@ -66,7 +66,7 @@ function TableSkeleton({ rows = 5, columns = 4 }) {
           {Array.from({ length: rows }).map((_, rowIndex) => (
             <tr key={rowIndex} className="border-b border-border">
               {Array.from({ length: columns }).map((_, colIndex) => (
-                <td key={colIndex} className="p-4 align-middle">
+                <td key={colIndex} className="px-3 py-2.5 align-middle">
                   <Skeleton variant="text" width="80%" />
                 </td>
               ))}
@@ -80,7 +80,7 @@ function TableSkeleton({ rows = 5, columns = 4 }) {
 
 function CardSkeleton({ className }) {
   return (
-    <div className={cn('rounded-lg border bg-background shadow-sm p-6', className)}>
+    <div className={cn('rounded-lg border bg-background shadow-xs p-5', className)}>
       <Skeleton variant="text" width="40%" className="mb-4" />
       <Skeleton variant="text" width="60%" className="mb-2" />
       <Skeleton variant="text" width="80%" />
@@ -90,11 +90,11 @@ function CardSkeleton({ className }) {
 
 function EmptyState({ icon: Icon = Inbox, title = 'No data', description, action, className }) {
   return (
-    <div className={cn('flex flex-col items-center justify-center py-12 px-4 text-center', className)}>
-      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-background-tertiary text-text-muted">
-        <Icon className="h-6 w-6" />
+    <div className={cn('flex flex-col items-center justify-center py-10 px-4 text-center', className)}>
+      <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-background-tertiary text-text-muted">
+        <Icon className="h-5 w-5" />
       </div>
-      <h3 className="text-lg font-medium text-text-primary">{title}</h3>
+      <h3 className="text-base font-medium text-text-primary">{title}</h3>
       {description && <p className="mt-1 text-sm text-text-muted max-w-sm">{description}</p>}
       {action && <div className="mt-4">{action}</div>}
     </div>
@@ -103,16 +103,16 @@ function EmptyState({ icon: Icon = Inbox, title = 'No data', description, action
 
 function ErrorState({ title = 'Something went wrong', description, onRetry, className }) {
   return (
-    <div className={cn('flex flex-col items-center justify-center py-12 px-4 text-center', className)}>
-      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-severity-critical-light text-severity-critical">
-        <AlertCircle className="h-6 w-6" />
+    <div className={cn('flex flex-col items-center justify-center py-10 px-4 text-center', className)}>
+      <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-severity-critical-light text-severity-critical">
+        <AlertCircle className="h-5 w-5" />
       </div>
-      <h3 className="text-lg font-medium text-text-primary">{title}</h3>
+      <h3 className="text-base font-medium text-text-primary">{title}</h3>
       {description && <p className="mt-1 text-sm text-text-muted max-w-sm">{description}</p>}
       {onRetry && (
         <button
           onClick={onRetry}
-          className="mt-4 inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-primary hover:text-primary-hover"
+          className="mt-4 inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-primary hover:text-primary-hover"
         >
           <RefreshCw className="h-4 w-4" />
           Try again
@@ -124,7 +124,7 @@ function ErrorState({ title = 'Something went wrong', description, onRetry, clas
 
 function PageLoading({ className }) {
   return (
-    <div className={cn('flex flex-col items-center justify-center min-h-[400px]', className)}>
+    <div className={cn('flex flex-col items-center justify-center min-h-[300px]', className)}>
       <LoadingSpinner size="lg" />
       <p className="mt-4 text-sm text-text-muted">Loading dashboard...</p>
     </div>

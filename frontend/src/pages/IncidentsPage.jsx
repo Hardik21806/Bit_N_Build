@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useState, useMemo } from 'react';
 import { useIncidents, useMergeIncident } from '../hooks';
 import { formatRelativeTime, formatDate, truncate, getSeverityRank, getStatusRank } from '../lib/utils';
+import { cn } from '../lib/utils';
 import {
   Card,
   CardHeader,
@@ -14,12 +15,11 @@ import { Input } from '../components/ui/Input';
 import { Label } from '../components/ui/Label';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '../components/ui/Select';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../components/ui/Table';
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '../components/ui/Dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '../components/ui/Dialog';
 import { ScrollArea } from '../components/ui/ScrollArea';
 import { Separator } from '../components/ui/Separator';
 import { AlertTriangle, Search, Filter, ChevronDown, ChevronUp, Loader2, RefreshCw, AlertCircle } from 'lucide-react';
-import { PageLoading, EmptyState, ErrorState, TableSkeleton ,Skeleton } from '../components/ui/States';
-import { cn } from '../lib/utils';
+import { PageLoading, EmptyState, ErrorState, TableSkeleton, Skeleton } from '../components/ui/States';
 
 const statusOptions = [
   { value: '', label: 'All Statuses' },
@@ -154,11 +154,11 @@ export function IncidentsPage() {
   }
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div className="space-y-5 animate-fade-in">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-text-primary">Incident Management</h1>
-          <p className="text-sm text-text-muted mt-1">View, filter, and manage all emergency incidents</p>
+          <h1 className="text-page-title text-text-primary">Incident Management</h1>
+          <p className="text-secondary text-text-muted mt-0.5">View, filter, and manage all emergency incidents</p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={() => refetch()} disabled={isLoading}>
@@ -169,8 +169,8 @@ export function IncidentsPage() {
       </div>
 
       <Card>
-        <CardContent className="p-4 pt-6">
-          <div className="flex flex-col sm:flex-row gap-4 mb-4">
+        <CardContent className="p-4 pt-5">
+          <div className="flex flex-col sm:flex-row gap-3 mb-4">
             <div className="flex-1 min-w-[200px]">
               <Label htmlFor="search" className="sr-only">Search incidents</Label>
               <Input
@@ -183,7 +183,7 @@ export function IncidentsPage() {
             </div>
             <div className="flex flex-wrap gap-2">
               <Select value={filters.status} onValueChange={(v) => handleFilterChange('status', v)}>
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-[170px]">
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -193,7 +193,7 @@ export function IncidentsPage() {
                 </SelectContent>
               </Select>
               <Select value={filters.severity} onValueChange={(v) => handleFilterChange('severity', v)}>
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-[170px]">
                   <SelectValue placeholder="Severity" />
                 </SelectTrigger>
                 <SelectContent>
@@ -203,7 +203,7 @@ export function IncidentsPage() {
                 </SelectContent>
               </Select>
               <Select value={filters.incident_type} onValueChange={(v) => handleFilterChange('incident_type', v)}>
-                <SelectTrigger className="w-[200px]">
+                <SelectTrigger className="w-[190px]">
                   <SelectValue placeholder="Incident Type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -215,11 +215,11 @@ export function IncidentsPage() {
             </div>
           </div>
 
-          <ScrollArea className="max-h-[600px]">
+          <ScrollArea className="max-h-[560px]">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-12">
+                  <TableHead className="w-10">
                     <input
                       type="checkbox"
                       checked={selectedIncidents.length === filteredIncidents.length && filteredIncidents.length > 0}
@@ -258,14 +258,14 @@ export function IncidentsPage() {
                       {sortConfig.key === 'reported_at' && (sortConfig.direction === 'asc' ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />)}
                     </div>
                   </TableHead>
-                  <TableHead className="w-48">Location</TableHead>
-                  <TableHead className="w-12"></TableHead>
+                  <TableHead className="w-44">Location</TableHead>
+                  <TableHead className="w-10"></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredIncidents.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={9} className="py-12 text-center">
+                    <TableCell colSpan={9} className="py-10 text-center">
                       <EmptyState
                         icon={AlertTriangle}
                         title="No incidents found"
@@ -276,7 +276,7 @@ export function IncidentsPage() {
                 ) : (
                   filteredIncidents.map((incident) => (
                     <TableRow key={incident.id} className={cn(selectedIncidents.includes(incident.id) && 'bg-primary-light/50')}>
-                      <TableCell className="p-3">
+                      <TableCell className="p-2.5">
                         <input
                           type="checkbox"
                           checked={selectedIncidents.includes(incident.id)}
@@ -284,34 +284,34 @@ export function IncidentsPage() {
                           className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
                         />
                       </TableCell>
-                      <TableCell className="p-3">
+                      <TableCell className="p-2.5">
                         <div className="flex items-center gap-2">
                           <SeverityBadge severity={incident.severity} />
                           <span className="font-mono text-sm text-text-primary">{incident.id.slice(0, 12)}...</span>
                         </div>
                       </TableCell>
-                      <TableCell className="hidden md:table-cell p-3">
+                      <TableCell className="hidden md:table-cell p-2.5">
                         <Badge variant="outline" className="text-xs">
                           {incident.incident_type?.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase()) || 'Unknown'}
                         </Badge>
                       </TableCell>
-                      <TableCell className="p-3">
+                      <TableCell className="p-2.5">
                         <SeverityBadge severity={incident.severity} />
                       </TableCell>
-                      <TableCell className="p-3">
+                      <TableCell className="p-2.5">
                         <StatusBadge status={incident.status} />
                       </TableCell>
-                      <TableCell className="hidden lg:table-cell p-3">
-                        <span className="text-sm text-text-secondary whitespace-nowrap">
+                      <TableCell className="hidden lg:table-cell p-2.5">
+                        <span className="text-sm text-text-secondary whitespace-nowrap tabular-nums">
                           {formatRelativeTime(incident.reported_at)}
                         </span>
                       </TableCell>
-                      <TableCell className="p-3">
-                        <span className="text-sm text-text-muted truncate max-w-[150px] block">
+                      <TableCell className="p-2.5">
+                        <span className="text-sm text-text-muted truncate max-w-[140px] block">
                           {incident.address || `${incident.location_lat?.toFixed(4)}, ${incident.location_lng?.toFixed(4)}`}
                         </span>
                       </TableCell>
-                      <TableCell className="p-3">
+                      <TableCell className="p-2.5">
                         <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
                           <AlertCircle className="h-4 w-4" />
                         </Button>
@@ -324,7 +324,7 @@ export function IncidentsPage() {
           </ScrollArea>
 
           {selectedIncidents.length > 0 && (
-            <div className="mt-4 p-4 bg-primary-light border border-primary rounded-lg">
+            <div className="mt-3 p-3 bg-primary-light border border-primary rounded-lg">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-primary">
                   {selectedIncidents.length} incident(s) selected
@@ -361,11 +361,11 @@ export function IncidentsPage() {
 
 function IncidentsSkeleton() {
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div className="space-y-5 animate-fade-in">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div><Skeleton variant="text" width="30%" className="h-6" /><Skeleton variant="text" width="50%" className="h-4 mt-1" /></div>
       </div>
-      <Card><CardContent className="p-4 pt-6"><div className="flex flex-col sm:flex-row gap-4 mb-4">{[1,2,3,4].map(i => <Skeleton key={i} variant="rectangular" height="42" width="200px" />)}</div><TableSkeleton rows={5} columns={8} /></CardContent></Card>
+      <Card><CardContent className="p-4 pt-5"><div className="flex flex-col sm:flex-row gap-3 mb-4">{[1,2,3,4].map(i => <Skeleton key={i} variant="rectangular" height="40" width="180px" />)}</div><TableSkeleton rows={5} columns={8} /></CardContent></Card>
     </div>
   );
 }

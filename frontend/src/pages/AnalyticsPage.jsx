@@ -1,24 +1,24 @@
 import { useState, useMemo } from 'react';
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer, 
-  PieChart, 
-  Pie, 
-  Cell, 
-  LineChart, 
-  Line, 
-  Legend 
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  LineChart,
+  Line,
+  Legend,
 } from 'recharts';
-import { 
-  Clock, 
-  AlertTriangle, 
-  MapPin, 
-  ShieldAlert, 
+import {
+  Clock,
+  AlertTriangle,
+  MapPin,
+  ShieldAlert,
   Download,
   Loader2,
   AlertCircle,
@@ -31,23 +31,23 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '.
 import { Badge } from '../components/ui/Badge';
 import { useAllIncidents } from '../hooks/useApi';
 
-const COLORS = {
-  primary: '#2563eb',
-  danger: '#ef4444',
-  warning: '#f59e0b',
-  success: '#10b981',
+const CHART_COLORS = {
+  primary: '#1e40af',
+  danger: '#b91c1c',
+  warning: '#c2410c',
+  success: '#16a34a',
   purple: '#8b5cf6',
   teal: '#14b8a6',
   gray: '#6b7280',
 };
 
-const INCIDENT_COLORS = ['#ef4444', '#f59e0b', '#3b82f6', '#8b5cf6', '#10b981'];
+const INCIDENT_COLORS = ['#b91c1c', '#c2410c', '#3b82f6', '#8b5cf6', '#16a34a'];
 
 const typeLabels = {
-  flood: 'Natural Disaster',
-  fire: 'Fire / Explosion',
+  flood: 'Flood',
+  fire: 'Fire',
   industrial_accident: 'Industrial Accident',
-  road_accident: 'Road Incident',
+  road_accident: 'Road Accident',
   medical_emergency: 'Medical Emergency',
   structural_collapse: 'Structural Collapse',
   other: 'Other',
@@ -77,10 +77,10 @@ function isWithinRange(incident, timeRange) {
   const now = new Date();
   const ts = parseTimestamp(incident.reported_at || incident.created_at || incident.updated_at);
   if (!ts) return false;
-  
+
   const diffMs = now - ts;
   const diffDays = diffMs / (1000 * 60 * 60 * 24);
-  
+
   switch (timeRange) {
     case '24h': return diffDays <= 1;
     case '7d': return diffDays <= 7;
@@ -92,6 +92,17 @@ function isWithinRange(incident, timeRange) {
 
 function getDayLabel(date) {
   return date.toLocaleDateString('en-US', { weekday: 'short' });
+}
+
+function EmptyChart({ height = 200, message = 'No data available for selected time range' }) {
+  return (
+    <div className="flex items-center justify-center h-full min-h-[200px]">
+      <div className="text-center">
+        <AlertCircle className="w-8 h-8 text-text-muted mx-auto mb-2 opacity-50" />
+        <p className="text-sm text-text-muted">{message}</p>
+      </div>
+    </div>
+  );
 }
 
 export default function AnalyticsPage() {
@@ -123,12 +134,12 @@ export default function AnalyticsPage() {
     filteredIncidents.forEach(inc => {
       const ts = parseTimestamp(inc.reported_at || inc.created_at);
       if (!ts) return;
-      
+
       const dayKey = ts.toISOString().split('T')[0];
-      const delay = Number(inc.response_delay_minutes || inc.delay_minutes || 
-        (inc.assigned_at && ts ? (new Date(inc.assigned_at) - ts) / (1000 * 60) : 
+      const delay = Number(inc.response_delay_minutes || inc.delay_minutes ||
+        (inc.assigned_at && ts ? (new Date(inc.assigned_at) - ts) / (1000 * 60) :
         ((inc.id || '').charCodeAt(0) % 5 + 5)));
-      
+
       if (!delaysByDay[dayKey]) delaysByDay[dayKey] = [];
       delaysByDay[dayKey].push(delay);
     });
@@ -156,7 +167,7 @@ export default function AnalyticsPage() {
         counts[type].available += 1;
       }
     });
-    
+
     if (Object.keys(counts).length === 0) {
       return [
         { category: 'Ambulances', available: 8, required: 15 },
@@ -166,7 +177,7 @@ export default function AnalyticsPage() {
         { category: 'Air Support', available: 1, required: 3 },
       ];
     }
-    
+
     return Object.entries(counts).map(([type, data]) => ({
       category: resourceLabels[type] || type.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase()),
       available: data.available,
@@ -180,7 +191,7 @@ export default function AnalyticsPage() {
       const loc = inc.location_name || inc.address || `Lat: ${inc.location_lat?.toFixed(2)}, Lng: ${inc.location_lng?.toFixed(2)}`;
       counts[loc] = (counts[loc] || 0) + 1;
     });
-    
+
     return Object.entries(counts)
       .sort((a, b) => b[1] - a[1])
       .slice(0, 5)
@@ -227,10 +238,10 @@ export default function AnalyticsPage() {
   if (allFailed) {
     return (
       <PageContainer title="Emergency Operational Analytics">
-        <div className="flex flex-col items-center justify-center p-12 bg-red-50 border border-red-200 rounded-xl text-center my-8">
-          <AlertCircle className="w-12 h-12 text-red-500 mb-3" />
-          <h3 className="text-lg font-bold text-red-700">Backend Disconnected</h3>
-          <p className="text-sm text-red-600 max-w-md mt-1">
+        <div className="flex flex-col items-center justify-center p-12 bg-severity-critical-light border border-severity-critical rounded-lg text-center my-8">
+          <AlertCircle className="w-12 h-12 text-severity-critical mb-3" />
+          <h3 className="text-lg font-bold text-severity-critical-text">Backend Disconnected</h3>
+          <p className="text-sm text-severity-critical-text max-w-md mt-1">
             Unable to connect to the backend server. Please make sure FastAPI is running.
           </p>
           <Button onClick={() => refetch()} className="mt-4" variant="outline">
@@ -241,18 +252,36 @@ export default function AnalyticsPage() {
     );
   }
 
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-background border border-border rounded-lg shadow-lg p-3 text-sm">
+          <p className="font-medium text-text-primary">{label}</p>
+          {payload.map((entry, index) => (
+            <p key={index} className="flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }} />
+              <span className="text-text-secondary">{entry.name}: </span>
+              <span className="font-medium text-text-primary">{entry.value}</span>
+            </p>
+          ))}
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <PageContainer title="Emergency Operational Analytics">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-5">
         <div>
-          <p className="text-sm text-gray-500">
+          <p className="text-secondary text-text-muted">
             Real-time statistical evaluation of incident frequencies, response times, and resource allocations.
           </p>
         </div>
-        
-        <div className="flex items-center gap-3">
+
+        <div className="flex items-center gap-2">
           <Select value={timeRange} onValueChange={setTimeRange}>
-            <SelectTrigger className="w-36">
+            <SelectTrigger className="w-32">
               <SelectValue placeholder="Time Range" />
             </SelectTrigger>
             <SelectContent>
@@ -266,7 +295,7 @@ export default function AnalyticsPage() {
           <Button variant="outline" size="sm" onClick={handleExport} className="flex items-center gap-2" disabled={anyLoading}>
             <Download className="w-4 h-4" /> Export Report
           </Button>
-          
+
           <Button variant="outline" size="sm" onClick={() => refetch()} disabled={anyLoading} className="flex items-center gap-2">
             <Loader2 className={`w-4 h-4 ${anyLoading ? 'animate-spin' : ''}`} /> Refresh
           </Button>
@@ -274,42 +303,42 @@ export default function AnalyticsPage() {
       </div>
 
       {anyLoading && (
-        <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg text-center text-sm text-blue-700 flex items-center justify-center gap-2">
+        <div className="mb-4 p-3 bg-primary-light border border-primary rounded-lg text-center text-sm text-primary flex items-center justify-center gap-2">
           <Loader2 className="w-4 h-4 animate-spin" />
           Loading analytics data...
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Card>
           <CardHeader>
-            <CardTitle className="text-base font-semibold flex items-center gap-2">
-              <ShieldAlert className="w-5 h-5 text-blue-600" /> Emergency Types Breakdown
+            <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <ShieldAlert className="w-4 h-4 text-primary" /> Emergency Types Breakdown
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 {emergencyTypesData.length === 0 ? (
-                  <div className="flex items-center justify-center h-full text-gray-400 text-sm">
-                    No incident data for selected time range
-                  </div>
+                  <EmptyChart />
                 ) : (
                   <PieChart>
                     <Pie
                       data={emergencyTypesData}
                       cx="50%"
                       cy="50%"
-                      innerRadius={60}
-                      outerRadius={90}
+                      innerRadius={50}
+                      outerRadius={80}
                       paddingAngle={4}
                       dataKey="count"
+                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                      labelLine={false}
                     >
                       {emergencyTypesData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={INCIDENT_COLORS[index % INCIDENT_COLORS.length]} />
                       ))}
                     </Pie>
-                    <Tooltip formatter={(value) => [`${value} Incidents`, 'Frequency']} />
+                    <Tooltip content={<CustomTooltip />} />
                     <Legend verticalAlign="bottom" height={36} />
                   </PieChart>
                 )}
@@ -320,39 +349,39 @@ export default function AnalyticsPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-base font-semibold flex items-center gap-2">
-              <Clock className="w-5 h-5 text-amber-600" /> Response Delays (Average vs Target)
+            <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <Clock className="w-4 h-4 text-severity-medium" /> Response Delays (Average vs Target)
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 {responseDelayData.length === 0 ? (
-                  <div className="flex items-center justify-center h-full text-gray-400 text-sm">
-                    No response delay data for selected time range
-                  </div>
+                  <EmptyChart />
                 ) : (
-                  <LineChart data={responseDelayData}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                    <XAxis dataKey="day" />
-                    <YAxis unit=" min" />
-                    <Tooltip />
-                    <Legend />
-                    <Line 
-                      type="monotone" 
-                      dataKey="avgDelayMinutes" 
-                      name="Avg Response Time" 
-                      stroke={COLORS.danger} 
-                      strokeWidth={2} 
-                      dot={{ r: 4 }}
-                    />
-                    <Line 
-                      type="monotone" 
-                      dataKey="targetMinutes" 
-                      name="SLA Target Time" 
-                      stroke={COLORS.success} 
-                      strokeDasharray="5 5" 
+                  <LineChart data={responseDelayData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e5e5" />
+                    <XAxis dataKey="day" tick={{ fontSize: 11, fill: '#737373' }} axisLine={{ stroke: '#e5e5e5' }} tickLine={false} />
+                    <YAxis unit=" min" tick={{ fontSize: 11, fill: '#737373' }} axisLine={false} tickLine={false} />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Legend layout="horizontal" align="center" verticalAlign="bottom" height={28} />
+                    <Line
+                      type="monotone"
+                      dataKey="avgDelayMinutes"
+                      name="Avg Response Time"
+                      stroke={CHART_COLORS.danger}
                       strokeWidth={2}
+                      dot={{ r: 4, strokeWidth: 2 }}
+                      activeDot={{ r: 6 }}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="targetMinutes"
+                      name="SLA Target Time"
+                      stroke={CHART_COLORS.success}
+                      strokeDasharray="5 5"
+                      strokeWidth={2}
+                      dot={false}
                     />
                   </LineChart>
                 )}
@@ -363,21 +392,21 @@ export default function AnalyticsPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-base font-semibold flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5 text-red-600" /> Resource Availability vs Requirements
+            <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-severity-critical" /> Resource Availability vs Requirements
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={resourceShortagesData}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                  <XAxis dataKey="category" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="available" name="Available Units" fill={COLORS.primary} radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="required" name="Required Units" fill={COLORS.warning} radius={[4, 4, 0, 0]} />
+                <BarChart data={resourceShortagesData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e5e5" />
+                  <XAxis dataKey="category" tick={{ fontSize: 11, fill: '#737373' }} axisLine={{ stroke: '#e5e5e5' }} tickLine={false} />
+                  <YAxis tick={{ fontSize: 11, fill: '#737373' }} axisLine={false} tickLine={false} />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Legend layout="horizontal" align="center" verticalAlign="bottom" height={28} />
+                  <Bar dataKey="available" name="Available Units" fill={CHART_COLORS.primary} radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="required" name="Required Units" fill={CHART_COLORS.warning} radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -386,31 +415,31 @@ export default function AnalyticsPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-base font-semibold flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-purple-600" /> Frequently Affected Areas
+            <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-purple-600" /> Frequently Affected Areas
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            <div className="space-y-3">
               {affectedAreasData.length === 0 ? (
-                <p className="text-xs text-gray-500 text-center py-4">No hotspot data for selected time range.</p>
+                <p className="text-xs text-text-muted text-center py-4">No hotspot data for selected time range.</p>
               ) : (
                 affectedAreasData.map((item, idx) => (
-                  <div key={idx} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-100">
+                  <div key={idx} className="flex items-center justify-between p-3 rounded-lg border border-border bg-background-tertiary/50">
                     <div className="flex items-center gap-3">
-                      <span className="font-bold text-gray-400 w-4">#{idx + 1}</span>
+                      <span className="text-text-muted font-mono w-5 text-center">#{idx + 1}</span>
                       <div>
-                        <p className="font-medium text-sm text-gray-900">{item.area}</p>
-                        <p className="text-xs text-gray-500">{item.incidents} Incidents logged</p>
+                        <p className="font-medium text-sm text-text-primary">{item.area}</p>
+                        <p className="text-xs text-text-muted">{item.incidents} Incidents logged</p>
                       </div>
                     </div>
-                    <Badge 
+                    <Badge
                       variant={
-                        item.riskLevel === 'High' 
-                          ? 'destructive' 
-                          : item.riskLevel === 'Medium' 
-                          ? 'warning' 
-                          : 'secondary'
+                        item.riskLevel === 'High'
+                          ? 'destructive'
+                          : item.riskLevel === 'Medium'
+                          ? 'secondary'
+                          : 'outline'
                       }
                     >
                       {item.riskLevel} Risk

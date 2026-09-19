@@ -3,7 +3,7 @@ import { cn } from '../../lib/utils';
 import { getSeverityColor, getStatusColor, getResourceStatusColor, getAssignmentStatusColor, getAlertStatusColor } from '../../lib/design-tokens';
 
 const badgeVariants = {
-  base: 'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors',
+  base: 'inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium transition-colors',
   variants: {
     default: 'bg-border text-text-primary',
     primary: 'bg-primary-light text-primary',
@@ -24,20 +24,20 @@ function Badge({ className, variant = 'default', children, ...props }) {
 function SeverityBadge({ severity, showIcon = false, ...props }) {
   const color = getSeverityColor(severity);
   const label = severity?.charAt(0).toUpperCase() + severity?.slice(1) || 'Unknown';
-  
+
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold',
+        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold',
         `bg-[${color.light}] text-[${color.text}]`,
         props.className
       )}
       {...props}
     >
       {showIcon && (
-        <span className="relative flex h-2 w-2">
+        <span className="relative flex h-1.5 w-1.5">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-current opacity-75" />
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-current" />
+          <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-current" />
         </span>
       )}
       {label}
@@ -48,7 +48,7 @@ function SeverityBadge({ severity, showIcon = false, ...props }) {
 function StatusBadge({ status, type = 'incident', ...props }) {
   let color;
   let label = status?.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase()) || 'Unknown';
-  
+
   switch (type) {
     case 'incident':
       color = getStatusColor(status);
@@ -65,11 +65,11 @@ function StatusBadge({ status, type = 'incident', ...props }) {
     default:
       color = getStatusColor(status);
   }
-  
+
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
+        'inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium',
         `bg-[${color.light}] text-[${color.text}]`,
         props.className
       )}
@@ -91,10 +91,10 @@ function ResourceTypeBadge({ type, ...props }) {
     equipment: 'Equipment',
     facility: 'Facility',
   };
-  
+
   return (
     <Badge variant="outline" className="gap-1" {...props}>
-      <span className="relative flex h-2 w-2 rounded-full bg-primary" />
+      <span className="relative flex h-1.5 w-1.5 rounded-full bg-primary" />
       {labels[type] || type}
     </Badge>
   );

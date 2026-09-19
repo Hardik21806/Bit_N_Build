@@ -108,18 +108,20 @@ export const spacing = {
 
 export const typography = {
   fontFamily: {
-    sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-    mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+    sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+    mono: ['JetBrains Mono', 'Fira Code', 'SF Mono', 'Monaco', 'monospace'],
   },
   fontSize: {
-    xs: ['0.75rem', { lineHeight: '1rem' }],
-    sm: ['0.875rem', { lineHeight: '1.25rem' }],
-    base: ['1rem', { lineHeight: '1.5rem' }],
-    lg: ['1.125rem', { lineHeight: '1.75rem' }],
-    xl: ['1.25rem', { lineHeight: '1.75rem' }],
-    '2xl': ['1.5rem', { lineHeight: '2rem' }],
-    '3xl': ['1.875rem', { lineHeight: '2.25rem' }],
-    '4xl': ['2.25rem', { lineHeight: '2.5rem' }],
+    xs: ['0.7rem', { lineHeight: '1rem', letterSpacing: '0.02em' }],
+    sm: ['0.8125rem', { lineHeight: '1.25rem', letterSpacing: '0.01em' }],
+    base: ['0.875rem', { lineHeight: '1.4rem', letterSpacing: '0' }],
+    lg: ['1rem', { lineHeight: '1.5rem', letterSpacing: '-0.01em' }],
+    xl: ['1.125rem', { lineHeight: '1.6rem', letterSpacing: '-0.01em' }],
+    '2xl': ['1.25rem', { lineHeight: '1.7rem', letterSpacing: '-0.02em' }],
+    '3xl': ['1.5rem', { lineHeight: '1.8rem', letterSpacing: '-0.02em' }],
+    '4xl': ['1.875rem', { lineHeight: '2.1rem', letterSpacing: '-0.03em' }],
+    'stat': ['2.5rem', { lineHeight: '1.1', letterSpacing: '-0.04em' }],
+    'stat-sm': ['1.75rem', { lineHeight: '1.2', letterSpacing: '-0.03em' }],
   },
   fontWeight: {
     normal: '400',
@@ -136,13 +138,13 @@ export const typography = {
 
 export const shadows = {
   none: 'none',
-  xs: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
-  sm: '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
-  DEFAULT: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
-  md: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
-  lg: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
-  xl: '0 25px 50px -12px rgb(0 0 0 / 0.15)',
-  inner: 'inset 0 2px 4px 0 rgb(0 0 0 / 0.05)',
+  xs: '0 1px 2px 0 rgb(0 0 0 / 0.03)',
+  sm: '0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.06)',
+  DEFAULT: '0 4px 6px -1px rgb(0 0 0 / 0.06), 0 2px 4px -2px rgb(0 0 0 / 0.06)',
+  md: '0 10px 15px -3px rgb(0 0 0 / 0.06), 0 4px 6px -4px rgb(0 0 0 / 0.06)',
+  lg: '0 20px 25px -5px rgb(0 0 0 / 0.08), 0 8px 10px -6px rgb(0 0 0 / 0.08)',
+  xl: '0 25px 50px -12px rgb(0 0 0 / 0.12)',
+  inner: 'inset 0 2px 4px 0 rgb(0 0 0 / 0.03)',
 };
 
 export const borderRadius = {
@@ -150,16 +152,16 @@ export const borderRadius = {
   sm: '0.25rem',
   DEFAULT: '0.375rem',
   md: '0.5rem',
-  lg: '0.75rem',
-  xl: '1rem',
-  '2xl': '1.5rem',
+  lg: '0.625rem',
+  xl: '0.75rem',
+  '2xl': '1rem',
   full: '9999px',
 };
 
 export const transitions = {
-  fast: '150ms ease',
-  DEFAULT: '200ms ease',
-  slow: '300ms ease',
+  fast: '120ms ease',
+  DEFAULT: '180ms ease',
+  slow: '250ms ease',
 };
 
 export const breakpoints = {
