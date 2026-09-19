@@ -15,6 +15,8 @@ from app import database as db
 from app.routers import incidents, resources, dashboard, analytics
 from app.services import escalation_scheduler
 
+
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",

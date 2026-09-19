@@ -5,3 +5,4 @@ export { ReportIncidentPage } from './ReportIncidentPage';
 export { IncidentDetailPage } from './IncidentDetailPage';
 export { DashboardMap } from './components/DashboardMap';
 export { AlertsPanel } from './components/AlertsPanel';
+export { default as AnalyticsPage } from './AnalyticsPage';

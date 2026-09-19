@@ -4,6 +4,7 @@ import { Sidebar } from './Sidebar';
 import { Header } from './Header';
 import { useSidebarStore } from '../../store/uiStore';
 
+
 export function PageContainer({ children, className }) {
   return (
     <main className={cn('flex-1 p-4 lg:p-6 overflow-auto', className)}>
