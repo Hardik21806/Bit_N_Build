@@ -90,14 +90,26 @@ export function Sidebar() {
         <div className="rounded-lg bg-background-tertiary p-3">
           <p className="text-xs font-medium text-text-secondary uppercase tracking-wider mb-2">Quick Actions</p>
           <div className="space-y-2">
-            <button className="w-full flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-text-secondary hover:bg-background hover:text-text-primary transition-colors">
+            <NavLink
+              to="/incidents/report"
+              className={({ isActive }) => cn(
+                'w-full flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
+                isActive ? 'bg-primary-light text-primary' : 'text-text-secondary hover:bg-background hover:text-text-primary'
+              )}
+            >
               <PlusCircle className="h-4 w-4" />
               <span>New Incident</span>
-            </button>
-            <button className="w-full flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-text-secondary hover:bg-background hover:text-text-primary transition-colors">
+            </NavLink>
+            <NavLink
+              to="/assignments"
+              className={({ isActive }) => cn(
+                'w-full flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
+                isActive ? 'bg-primary-light text-primary' : 'text-text-secondary hover:bg-background hover:text-text-primary'
+              )}
+            >
               <Truck className="h-4 w-4" />
               <span>Dispatch Resource</span>
-            </button>
+            </NavLink>
           </div>
         </div>
       </div>

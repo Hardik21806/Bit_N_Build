@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useMemo , useState} from 'react';
-import { useAllAssignments, useUpdateAssignmentStatus, useIncidents } from '../hooks';
+import { useMemo, useState } from 'react';
+import { useAllAssignments, useUpdateAssignmentStatus } from '../hooks';
 import { formatRelativeTime } from '../lib/utils';
 import { cn } from '../lib/utils';
 import {
@@ -39,8 +39,7 @@ export function AssignmentsPage() {
   const [statusDialogOpen, setStatusDialogOpen] = useState(false);
   const [selectedAssignment, setSelectedAssignment] = useState(null);
 
-  const { data: assignments = [], isLoading, isError, error, refetch } = useAllAssignments();
-  const { data: incidents = [] } = useIncidents({ limit: 200 });
+  const { data: assignments = [], isLoading, isError, error, refetch } = useAllAssignments(filters);
   const updateAssignmentStatus = useUpdateAssignmentStatus();
 
   const handleFilterChange = (key, value) => {
@@ -176,11 +175,16 @@ export function AssignmentsPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="">All Incidents</SelectItem>
-                  {incidents.map(inc => (
-                    <SelectItem key={inc.id} value={inc.id}>
-                      {inc.id.slice(0, 12)}... - {inc.incident_type?.replace('_', ' ')}
-                    </SelectItem>
-                  ))}
+                  {(() => {
+                    const seen = new Set();
+                    return assignments
+                      .filter(a => a.incident?.id && !seen.has(a.incident.id) && seen.add(a.incident.id))
+                      .map(inc => (
+                        <SelectItem key={inc.incident.id} value={inc.incident.id}>
+                          {inc.incident.id.slice(0, 12)}... - {inc.incident.incident_type?.replace('_', ' ')}
+                        </SelectItem>
+                      ));
+                  })()}
                 </SelectContent></Select>
             </div>
           </div>

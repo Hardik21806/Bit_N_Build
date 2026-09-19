@@ -99,6 +99,7 @@ export const API_ENDPOINTS = {
   RESOURCE_RECOMMEND: (id) => `/resources/recommend/${id}`,
   RESOURCE_ASSIGN: '/resources/assign',
   RESOURCE_ASSIGNMENTS: (id) => `/resources/assignments/${id}`,
+  RESOURCE_ASSIGNMENTS_ALL: '/resources/assignments',
   DASHBOARD_OVERVIEW: '/dashboard/overview',
   DASHBOARD_ALERTS: '/dashboard/alerts',
   ALERT_ACKNOWLEDGE: (id) => `/dashboard/alerts/${id}/acknowledge`,

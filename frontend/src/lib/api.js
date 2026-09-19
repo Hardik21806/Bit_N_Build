@@ -43,6 +43,7 @@ export const resourceApi = {
   recommend: (incidentId) => api.get(API_ENDPOINTS.RESOURCE_RECOMMEND(incidentId)),
   assign: (data) => api.post(API_ENDPOINTS.RESOURCE_ASSIGN, data),
   getAssignments: (incidentId) => api.get(API_ENDPOINTS.RESOURCE_ASSIGNMENTS(incidentId)),
+  getAllAssignments: (params = {}) => api.get(API_ENDPOINTS.RESOURCE_ASSIGNMENTS_ALL, { params }),
   updateAssignmentStatus: (id, status) => api.patch(`/assignments/${id}/status`, { status }),
 };
 

@@ -166,22 +166,11 @@ export function useAssignmentsForIncidents(incidentIds) {
   });
 }
 
-export function useAllAssignments() {
+export function useAllAssignments(filters = {}) {
   return useQuery({
-    queryKey: ['assignments', 'all'],
-    queryFn: async () => {
-      const incidentsResponse = await incidentApi.list({ limit: 200 });
-      const incidents = incidentsResponse.data;
-      const incidentIds = incidents.map(i => i.id);
-      if (!incidentIds.length) return [];
-      const results = await Promise.all(
-        incidentIds.map(id => resourceApi.getAssignments(id).then(r => r.data).catch(() => []))
-      );
-      return results.flat().map((assignment, idx) => ({
-        ...assignment,
-        incident: incidents.find(i => i.id === assignment.incident_id)
-      }));
-    },
+    queryKey: ['assignments', 'all', filters],
+    queryFn: () => resourceApi.getAllAssignments(filters),
+    select: (response) => response.data,
     refetchInterval: 30000,
   });
 }
