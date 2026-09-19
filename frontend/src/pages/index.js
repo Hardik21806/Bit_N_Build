@@ -8,3 +8,4 @@ export { IncidentDetailPage } from './IncidentDetailPage';
 export { DashboardMap } from './components/DashboardMap';
 export { AlertsPanel } from './components/AlertsPanel';
 export { default as AnalyticsPage } from './AnalyticsPage';
+export { default as MapPage } from './MapPage';

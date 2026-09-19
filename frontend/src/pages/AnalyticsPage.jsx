@@ -36,7 +36,6 @@ import {
   useAnalyticsHotspots 
 } from '../hooks/useApi';
 
-// Color Palette for Charts
 const COLORS = {
   primary: '#2563eb',
   danger: '#ef4444',
@@ -53,45 +52,33 @@ export default function AnalyticsPage() {
   const [timeRange, setTimeRange] = useState('7d');
 
   // Fetch data using your custom API hooks
-  const { data: incidentTypes } = useAnalyticsIncidentTypes();
-  const { data: responseDelays } = useAnalyticsResponseDelays();
-  const { data: resourceShortages } = useAnalyticsResourceShortages();
-  const { data: hotspots } = useAnalyticsHotspots(2);
+  const { data: incidentTypes, isError: err1, isLoading: load1 } = useAnalyticsIncidentTypes();
+  const { data: responseDelays, isError: err2, isLoading: load2 } = useAnalyticsResponseDelays();
+  const { data: resourceShortages, isError: err3, isLoading: load3 } = useAnalyticsResourceShortages();
+  const { data: hotspots, isError: err4, isLoading: load4 } = useAnalyticsHotspots(2);
 
-  // Fallbacks if backend responses are empty or loading
-  const emergencyTypesData = incidentTypes || [
-    { name: 'Fire / Explosion', count: 42 },
-    { name: 'Medical Emergency', count: 35 },
-    { name: 'Natural Disaster', count: 20 },
-    { name: 'Industrial Accident', count: 13 },
-    { name: 'Road Incident', count: 10 },
-  ];
+  // If backend is shut down or unreachable, show error banner instead of mock data
+  const isBackendDown = err1 || err2 || err3 || err4;
 
-  const responseDelayData = responseDelays || [
-    { day: 'Mon', avgDelayMinutes: 8.5, targetMinutes: 10 },
-    { day: 'Tue', avgDelayMinutes: 12.2, targetMinutes: 10 },
-    { day: 'Wed', avgDelayMinutes: 9.1, targetMinutes: 10 },
-    { day: 'Thu', avgDelayMinutes: 14.8, targetMinutes: 10 },
-    { day: 'Fri', avgDelayMinutes: 11.0, targetMinutes: 10 },
-    { day: 'Sat', avgDelayMinutes: 7.4, targetMinutes: 10 },
-    { day: 'Sun', avgDelayMinutes: 6.8, targetMinutes: 10 },
-  ];
+  if (isBackendDown) {
+    return (
+      <PageContainer title="Emergency Operational Analytics">
+        <div className="flex flex-col items-center justify-center p-12 bg-red-50 border border-red-200 rounded-xl text-center my-8">
+          <AlertTriangle className="w-12 h-12 text-red-500 mb-3" />
+          <h3 className="text-lg font-bold text-red-700">Backend Disconnected</h3>
+          <p className="text-sm text-red-600 max-w-md mt-1">
+            Unable to connect to the backend server. Please make sure FastAPI is running.
+          </p>
+        </div>
+      </PageContainer>
+    );
+  }
 
-  const resourceShortagesData = resourceShortages || [
-    { category: 'Ambulances', available: 8, required: 15 },
-    { category: 'Fire Trucks', available: 12, required: 14 },
-    { category: 'Hazmat Teams', available: 3, required: 6 },
-    { category: 'Rescue Boats', available: 5, required: 5 },
-    { category: 'Air Support', available: 1, required: 3 },
-  ];
-
-  const affectedAreasData = hotspots || [
-    { area: 'Downtown Sector A', incidents: 38, riskLevel: 'High' },
-    { area: 'Industrial Park Zone 3', incidents: 29, riskLevel: 'High' },
-    { area: 'North River Basin', incidents: 21, riskLevel: 'Medium' },
-    { area: 'East Highway Junction', incidents: 18, riskLevel: 'Medium' },
-    { area: 'West Suburbs', incidents: 9, riskLevel: 'Low' },
-  ];
+  // Pure DB data (empty array while loading or if table has 0 rows)
+  const emergencyTypesData = incidentTypes || [];
+  const responseDelayData = responseDelays || [];
+  const resourceShortagesData = resourceShortages || [];
+  const affectedAreasData = hotspots || [];
 
   return (
     <PageContainer title="Emergency Operational Analytics">
@@ -119,67 +106,6 @@ export default function AnalyticsPage() {
             <Download className="w-4 h-4" /> Export Report
           </Button>
         </div>
-      </div>
-
-      {/* Overview Stat Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <Card>
-          <CardContent className="p-4 flex items-center justify-between">
-            <div>
-              <p className="text-xs text-gray-500 font-medium uppercase">Total Incidents</p>
-              <h3 className="text-2xl font-bold mt-1 text-gray-900">120</h3>
-              <p className="text-xs text-emerald-600 mt-1 flex items-center gap-1 font-medium">
-                <TrendingUp className="w-3 h-3" /> -12% vs last period
-              </p>
-            </div>
-            <div className="p-3 bg-blue-50 text-blue-600 rounded-lg">
-              <Activity className="w-6 h-6" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4 flex items-center justify-between">
-            <div>
-              <p className="text-xs text-gray-500 font-medium uppercase">Avg Response Time</p>
-              <h3 className="text-2xl font-bold mt-1 text-gray-900">9.9 min</h3>
-              <p className="text-xs text-amber-600 mt-1 flex items-center gap-1 font-medium">
-                <Clock className="w-3 h-3" /> +1.2 min peak delay
-              </p>
-            </div>
-            <div className="p-3 bg-amber-50 text-amber-600 rounded-lg">
-              <Clock className="w-6 h-6" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4 flex items-center justify-between">
-            <div>
-              <p className="text-xs text-gray-500 font-medium uppercase">Critical Shortages</p>
-              <h3 className="text-2xl font-bold mt-1 text-gray-900">14 units</h3>
-              <p className="text-xs text-red-600 mt-1 flex items-center gap-1 font-medium">
-                <AlertTriangle className="w-3 h-3" /> Ambulances & Hazmat
-              </p>
-            </div>
-            <div className="p-3 bg-red-50 text-red-600 rounded-lg">
-              <AlertTriangle className="w-6 h-6" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4 flex items-center justify-between">
-            <div>
-              <p className="text-xs text-gray-500 font-medium uppercase">Primary Hotspot</p>
-              <h3 className="text-lg font-bold mt-1 text-gray-900 truncate">Downtown A</h3>
-              <p className="text-xs text-gray-500 mt-1">38 Incidents Reported</p>
-            </div>
-            <div className="p-3 bg-purple-50 text-purple-600 rounded-lg">
-              <MapPin className="w-6 h-6" />
-            </div>
-          </CardContent>
-        </Card>
       </div>
 
       {/* Main Analytics Grid */}
@@ -288,28 +214,32 @@ export default function AnalyticsPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {affectedAreasData.map((item, idx) => (
-                <div key={idx} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-100">
-                  <div className="flex items-center gap-3">
-                    <span className="font-bold text-gray-400 w-4">#{idx + 1}</span>
-                    <div>
-                      <p className="font-medium text-sm text-gray-900">{item.area}</p>
-                      <p className="text-xs text-gray-500">{item.incidents} Incidents logged</p>
+              {affectedAreasData.length === 0 ? (
+                <p className="text-xs text-gray-500 text-center py-4">No hotspot data found in database.</p>
+              ) : (
+                affectedAreasData.map((item, idx) => (
+                  <div key={idx} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-100">
+                    <div className="flex items-center gap-3">
+                      <span className="font-bold text-gray-400 w-4">#{idx + 1}</span>
+                      <div>
+                        <p className="font-medium text-sm text-gray-900">{item.area}</p>
+                        <p className="text-xs text-gray-500">{item.incidents} Incidents logged</p>
+                      </div>
                     </div>
+                    <Badge 
+                      variant={
+                        item.riskLevel === 'High' 
+                          ? 'destructive' 
+                          : item.riskLevel === 'Medium' 
+                          ? 'warning' 
+                          : 'secondary'
+                      }
+                    >
+                      {item.riskLevel} Risk
+                    </Badge>
                   </div>
-                  <Badge 
-                    variant={
-                      item.riskLevel === 'High' 
-                        ? 'destructive' 
-                        : item.riskLevel === 'Medium' 
-                        ? 'warning' 
-                        : 'secondary'
-                    }
-                  >
-                    {item.riskLevel} Risk
-                  </Badge>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </CardContent>
         </Card>

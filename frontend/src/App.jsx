@@ -8,15 +8,15 @@ import {
   DashboardPage, 
   IncidentsPage, 
   ResourcesPage, 
-  AssignmentsPage,
   ReportIncidentPage, 
   IncidentDetailPage,
   AnalyticsPage,
-  AlertsPage
+  MapPage,
+  AssignmentsPage
 } from './pages';
 
-function MapPage() {
-  return <div className="p-4">Map Page - Coming Soon</div>;
+function AlertsPage() {
+  return <div className="p-4">Alerts Page - Coming Soon</div>;
 }
 
 function SettingsPage() {
@@ -28,56 +28,16 @@ function AppContent() {
   
   return (
     <Routes>
-      <Route path="/" element={
-        <Layout>
-          <DashboardPage />
-        </Layout>
-      } />
-      <Route path="/incidents" element={
-        <Layout>
-          <IncidentsPage />
-        </Layout>
-      } />
-      <Route path="/incidents/report" element={
-        <Layout>
-          <ReportIncidentPage />
-        </Layout>
-      } />
-      <Route path="/incidents/:id" element={
-        <Layout>
-          <IncidentDetailPage />
-        </Layout>
-      } />
-      <Route path="/resources" element={
-        <Layout>
-          <ResourcesPage />
-        </Layout>
-      } />
-      <Route path="/assignments" element={
-        <Layout>
-          <AssignmentsPage />
-        </Layout>
-      } />
-      <Route path="/map" element={
-        <Layout>
-          <MapPage />
-        </Layout>
-      } />
-      <Route path="/analytics" element={
-        <Layout>
-          <AnalyticsPage />
-        </Layout>
-      } />
-      <Route path="/alerts" element={
-        <Layout>
-          <AlertsPage />
-        </Layout>
-      } />
-      <Route path="/settings" element={
-        <Layout>
-          <SettingsPage />
-        </Layout>
-      } />
+      <Route path="/" element={<Layout><DashboardPage /></Layout>} />
+      <Route path="/incidents" element={<Layout><IncidentsPage /></Layout>} />
+      <Route path="/incidents/report" element={<Layout><ReportIncidentPage /></Layout>} />
+      <Route path="/incidents/:id" element={<Layout><IncidentDetailPage /></Layout>} />
+      <Route path="/resources" element={<Layout><ResourcesPage /></Layout>} />
+      <Route path="/assignments" element={<Layout><AssignmentsPage /></Layout>} />
+      <Route path="/map" element={<Layout><MapPage /></Layout>} />
+      <Route path="/analytics" element={<Layout><AnalyticsPage /></Layout>} />
+      <Route path="/alerts" element={<Layout><AlertsPage /></Layout>} />
+      <Route path="/settings" element={<Layout><SettingsPage /></Layout>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
