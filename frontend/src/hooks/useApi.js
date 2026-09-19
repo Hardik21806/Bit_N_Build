@@ -166,6 +166,30 @@ export function useAssignmentsForIncidents(incidentIds) {
   });
 }
 
+export function useAllAssignments(filters = {}) {
+  return useQuery({
+    queryKey: ['assignments', 'all', filters],
+    queryFn: () => resourceApi.getAllAssignments(filters),
+    select: (response) => response.data,
+    refetchInterval: 30000,
+  });
+}
+
+export function useUpdateAssignmentStatus() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, status }) => resourceApi.updateAssignmentStatus(id, status),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['assignments'] });
+      queryClient.invalidateQueries({ queryKey: ['incidents'] });
+      queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+    },
+    onError: (error) => {
+      console.error('Failed to update assignment status:', parseApiError(error));
+    },
+  });
+}
+
 export function useDashboardOverview() {
   return useQuery({
     queryKey: ['dashboard', 'overview'],
@@ -184,6 +208,15 @@ export function useDashboardAlerts(status = 'active') {
   });
 }
 
+export function useAllDashboardAlerts() {
+  return useQuery({
+    queryKey: ['dashboard', 'alerts', 'all'],
+    queryFn: () => dashboardApi.getAlerts('all'),
+    select: (response) => response.data,
+    refetchInterval: 30000,
+  });
+}
+
 export function useAcknowledgeAlert() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -193,6 +226,19 @@ export function useAcknowledgeAlert() {
     },
     onError: (error) => {
       console.error('Failed to acknowledge alert:', parseApiError(error));
+    },
+  });
+}
+
+export function useResolveAlert() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id) => dashboardApi.resolveAlert(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['dashboard', 'alerts'] });
+    },
+    onError: (error) => {
+      console.error('Failed to resolve alert:', parseApiError(error));
     },
   });
 }
