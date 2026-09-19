@@ -4,11 +4,7 @@ import { QueryProvider } from './lib/queryClient';
 import { TooltipProvider } from './components/ui';
 import { Layout } from './components/layout';
 import { useDashboardWebSocket } from './hooks';
-import { DashboardPage, IncidentsPage } from './pages';
-
-function ReportIncidentPage() {
-  return <div className="p-4">Report Incident Page - Coming Soon</div>;
-}
+import { DashboardPage, IncidentsPage, ReportIncidentPage, IncidentDetailPage } from './pages';
 
 function ResourcesPage() {
   return <div className="p-4">Resources Page - Coming Soon</div>;
@@ -52,6 +48,11 @@ function AppContent() {
       <Route path="/incidents/report" element={
         <Layout>
           <ReportIncidentPage />
+        </Layout>
+      } />
+      <Route path="/incidents/:id" element={
+        <Layout>
+          <IncidentDetailPage />
         </Layout>
       } />
       <Route path="/resources" element={
