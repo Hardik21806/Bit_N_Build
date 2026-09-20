@@ -939,3 +939,48 @@
   box-shadow:
     0 4px 16px rgb(0 0 0 / 0.08);
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #f7f7f5;
+  color: #0f172a;
+  font-family: "Instrument Sans", system-ui, sans-serif;
+}
+
+.font-display {
+  font-family: "Bricolage Grotesque", system-ui, sans-serif;
+}
+
+.font-mono {
+  font-family: "IBM Plex Mono", monospace;
+}
+
+/* Better selection */
+::selection {
+  background: #0f172a;
+  color: #ffffff;
+}
+
+/* Clean scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f2ef;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd1cc;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a09a;
+}
