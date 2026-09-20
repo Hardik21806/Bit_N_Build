@@ -8,7 +8,6 @@ import {
   Truck,
   BarChart2,
   Bell,
-  Settings,
   MapPin,
   Users,
   ChevronLeft,
@@ -25,7 +24,6 @@ const navigation = [
   { name: 'Map View', href: '/map', icon: MapPin },
   { name: 'Analytics', href: '/analytics', icon: BarChart2 },
   { name: 'Alerts', href: '/alerts', icon: Bell },
-  { name: 'Settings', href: '/settings', icon: Settings },
 ];
 
 const primaryActions = [
